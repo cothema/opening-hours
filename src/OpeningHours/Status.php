@@ -10,7 +10,7 @@ use \Nette\Utils\DateTime;
  */
 class Status extends \Nette\Object {
 
-    /** @var \App\Components\OpeningHours\Model */
+    /** @var \Cothema\OpeningHours\Model\OpeningHours */
     private $model;
 
     /** @var \Nette\Utils\DateTime */
@@ -74,12 +74,72 @@ class Status extends \Nette\Object {
      * @param \Nette\Utils\DateTime $time
      */
     public function isOpenedByTime(DateTime $time) {
-        $openingHours = $this->model->getDay($time->format('w'));
+        $status = $this->getStatusByTime($time);
 
-        $todayOpen = $this->getTimeMidnight()->modify($openingHours->getOpenTime());
-        $todayClose = $this->getTimeMidnight()->modify($openingHours->getCloseTime());
+        if ($status instanceof Status\Opened) {
+            return TRUE;
+        } elseif ($status instanceof Status\Closed) {
+            return FALSE;
+        }
 
-        return ($time >= $todayOpen && $time < $todayClose);
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return \Cothema\OpeningHours\Status\I\Status
+     */
+    public function getStatus() {
+        return $this->getStatusByTime($this->time);
+    }
+
+    /**
+     * 
+     * @param DateTime $time
+     * @return \Cothema\OpeningHours\Status\I\Status
+     */
+    public function getStatusByTime(DateTime $time) {
+        $days = ['', '-1 day']; // DateTime modifiers
+
+        foreach ($days as $day) {
+            $iStatus = $this->getStatusByTimeInDay($time, $day);
+
+            if ($iStatus instanceof Status\Opened) {
+                $status = $iStatus;
+                break;
+            }
+        }
+
+        if (!isset($status)) {
+            $status = new Status\Closed();
+        }
+
+        return $status;
+    }
+
+    /**
+     * 
+     * @param \Nette\Utils\DateTime $time
+     * @param string $modify
+     */
+    private function getStatusByTimeInDay(DateTime $time, $modify = '') {
+        $day = (new DateTime($time))->modify($modify . ' ' . 'midnight');
+        $openingHours = $this->model->getDay($day->format('w'));
+
+        $todayOpen = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getOpenTime());
+        $todayClose = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getCloseTime());
+
+        if (($time >= $todayOpen && $time < $todayClose)) {
+            $status = new Status\Opened;
+        } else {
+            $status = new Status\Closed;
+        }
+
+        $resolver = new Resolver\WeekDay();
+        $resolver->setDay($day->format('w'));
+        $status->setResolver($resolver);
+
+        return $status;
     }
 
     /**
@@ -96,8 +156,10 @@ class Status extends \Nette\Object {
      */
     public function getClosingAtWarning() {
         $time = new DateTime($this->time);
-        if ($this->isOpened() && !$this->isOpenedByTime($time->modify('+2 hours'))) {
-            return $this->closingAt();
+
+        $status = $this->getStatus();
+        if ($status instanceof \Cothema\OpeningHours\Status\Opened && !$this->isOpenedByTime($time->modify('+2 hours'))) {
+            return $this->closingAtByWeekDay($status->getResolver()->getDay());
         }
 
         return FALSE;
@@ -107,8 +169,8 @@ class Status extends \Nette\Object {
      * 
      * @return string
      */
-    private function closingAt() {
-        $closing = $this->getTimeMidnight()->modify($this->model->getDay($this->time->format('w'))->getCloseTime());
+    private function closingAtByWeekDay($day) {
+        $closing = $this->getTimeMidnight()->modify($this->model->getDay($day)->getCloseTime());
         return $closing->format('H:i');
     }
 
