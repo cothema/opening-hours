@@ -87,9 +87,9 @@ class OpeningHours extends \Nette\Object {
     /**
      * 
      * @param array $days e.g. ['2015-12-01', '2015-12-02']
-     * @param array $openingHours e.g. ['10:00', '11:00']
+     * @param array|FALSE $openingHours e.g. ['10:00', '11:00']
      */
-    public function addSpecificDays(array $days, array $openingHours) {
+    public function addSpecificDays(array $days, $openingHours) {
         foreach ($days as $day) {
             $this->addSpecificDay($day, $openingHours);
         }
