@@ -52,6 +52,7 @@ class Status extends \Tester\TestCase {
         ]);
         $openingHours->addSpecificDay('2015-12-01', ['10:00', '11:00']); // Thuesday
         $openingHours->addSpecificDay('2015-12-02', FALSE); // Wednesday
+        $openingHours->addSpecificDays(['2015-12-03', '2015-12-04'], ['10:00', '11:00']); // Thursday, Friday
         return new Tested($openingHours);
     }
 
@@ -119,7 +120,7 @@ class Status extends \Tester\TestCase {
 
         Assert::true($openingHoursStatus->isOpened(), '1.1');
         Assert::truthy($openingHoursStatus->getClosingAtWarning(), '1.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-01 09:30:00'));
 
         Assert::false($openingHoursStatus->isOpened(), '2.1');
@@ -134,11 +135,31 @@ class Status extends \Tester\TestCase {
 
         Assert::false($openingHoursStatus->isOpened(), '4.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '4.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-01 16:00:00'));
 
         Assert::false($openingHoursStatus->isOpened(), '5.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '5.2');
+        
+        $openingHoursStatus->setTime(new DateTime('2015-12-03 16:00:00'));
+
+        Assert::false($openingHoursStatus->isOpened(), '6.1');
+        Assert::false($openingHoursStatus->getClosingAtWarning(), '6.2');
+        
+        $openingHoursStatus->setTime(new DateTime('2015-12-04 16:00:00'));
+
+        Assert::false($openingHoursStatus->isOpened(), '7.1');
+        Assert::false($openingHoursStatus->getClosingAtWarning(), '7.2');
+        
+        $openingHoursStatus->setTime(new DateTime('2015-12-03 10:30:00'));
+
+        Assert::true($openingHoursStatus->isOpened(), '8.1');
+        Assert::truthy($openingHoursStatus->getClosingAtWarning(), '8.2');
+        
+        $openingHoursStatus->setTime(new DateTime('2015-12-04 10:30:00'));
+
+        Assert::true($openingHoursStatus->isOpened(), '9.1');
+        Assert::truthy($openingHoursStatus->getClosingAtWarning(), '9.2');
     }
 
 }

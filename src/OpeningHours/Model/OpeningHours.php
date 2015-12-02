@@ -67,13 +67,32 @@ class OpeningHours extends \Nette\Object {
     /**
      * 
      * @param string $day e.g. '2015-12-01'
-     * @param array $openingHours e.g. ['10:00', '11:00']
+     * @param array|FALSE $openingHours e.g. ['10:00', '11:00']
      */
     public function addSpecificDay($day, $openingHours) {
         $specificDay = new SpecificDay($day);
-        $specificDay->setOpenTime($openingHours[0]);
-        $specificDay->setCloseTime($openingHours[1]);
+
+        if (is_array($openingHours)) {
+            $specificDay->setOpenTime($openingHours[0]);
+            $specificDay->setCloseTime($openingHours[1]);
+        } elseif ($openingHours === FALSE) {
+            // Closed all the day
+        } else {
+            throw new \Exception('Invalid $openingHours param format.');
+        }
+
         $this->specificDays[$day] = $specificDay;
+    }
+
+    /**
+     * 
+     * @param array $days e.g. ['2015-12-01', '2015-12-02']
+     * @param array $openingHours e.g. ['10:00', '11:00']
+     */
+    public function addSpecificDays(array $days, array $openingHours) {
+        foreach ($days as $day) {
+            $this->addSpecificDay($day, $openingHours);
+        }
     }
 
     /**
