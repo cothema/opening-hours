@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\OpeningHours\Model;
+namespace Cothema\OpeningHours\Model;
 
 /**
  * 
@@ -8,20 +8,34 @@ namespace App\Components\OpeningHours\Model;
  */
 class OpeningHours extends \Nette\Object {
 
+    /** @var array */
     private $openingHours;
 
     public function __construct() {
         $this->openingHours = [];
     }
 
+    /**
+     * 
+     * @param string $day
+     * @return WeekDay
+     */
     public function getDay($day) {
         return $this->openingHours[(string) $day];
     }
     
+    /**
+     * 
+     * @return WeekDay
+     */
     public function getToday() {
         return $this->getDay(date('w'));
     }
 
+    /**
+     * 
+     * @param array $openingHours
+     */
     public function setOpeningHours(array $openingHours) {
         foreach($openingHours as $openingHourKey => $openingHour) {
             $weekDay = new WeekDay($openingHourKey);

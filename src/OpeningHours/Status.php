@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\OpeningHours;
+namespace Cothema\OpeningHours;
 
-use \Nette\DateTime;
+use \Nette\Utils\DateTime;
 
 /**
  * 
@@ -13,7 +13,7 @@ class Status extends \Nette\Object {
     /** @var \App\Components\OpeningHours\Model */
     private $model;
 
-    /** @var \Nette\DateTime */
+    /** @var \Nette\Utils\DateTime */
     private $time;
 
     /** @var string */
@@ -31,7 +31,7 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @return \Nette\DateTime
+     * @return \Nette\Utils\DateTime
      */
     public function getTime() {
         return $this->time;
@@ -47,7 +47,7 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @param \Nette\DateTime $time
+     * @param \Nette\Utils\DateTime $time
      */
     public function setTime(DateTime $time) {
         $this->time = $time;
@@ -66,12 +66,28 @@ class Status extends \Nette\Object {
      * @return boolean
      */
     public function isOpened() {
-        $opened = $this->model->getDay($this->time->format('w'));
+        return $this->isOpenedByTime($this->time);
+    }
 
-        $todayOpen = new DateTime($opened->getOpenTime());
-        $todayClose = new DateTime($opened->getCloseTime());
+    /**
+     * 
+     * @param \Nette\Utils\DateTime $time
+     */
+    public function isOpenedByTime(DateTime $time) {
+        $openingHours = $this->model->getDay($time->format('w'));
 
-        return ($this->time >= $todayOpen && $this->time < $todayClose);
+        $todayOpen = $this->getTimeMidnight()->modify($openingHours->getOpenTime());
+        $todayClose = $this->getTimeMidnight()->modify($openingHours->getCloseTime());
+
+        return ($time >= $todayOpen && $time < $todayClose);
+    }
+
+    /**
+     * 
+     * @return \Nette\Utils\DateTime
+     */
+    private function getTimeMidnight() {
+        return (new DateTime($this->time))->setTime('00', '00', '00');
     }
 
     /**
@@ -79,7 +95,8 @@ class Status extends \Nette\Object {
      * @return string|boolean
      */
     public function getClosingAtWarning() {
-        if ($this->isOpened() && !$this->isOpened($this->time->diff('+2 hours'))) {
+        $time = new DateTime($this->time);
+        if ($this->isOpened() && !$this->isOpenedByTime($time->modify('+2 hours'))) {
             return $this->closingAt();
         }
 
@@ -88,10 +105,10 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @return 
+     * @return string
      */
     private function closingAt() {
-        $closing = new DateTime($this->model->getDay($time->format('w'))->getCloseTime);
+        $closing = $this->getTimeMidnight()->modify($this->model->getDay($this->time->format('w'))->getCloseTime());
         return $closing->format('H:i');
     }
 
