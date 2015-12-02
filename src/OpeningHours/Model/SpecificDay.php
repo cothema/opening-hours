@@ -6,11 +6,11 @@ namespace Cothema\OpeningHours\Model;
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class WeekDay extends \Nette\Object implements I\Day {
+class SpecificDay extends \Nette\Object implements I\Day {
 
     /** @var string */
-    private $dayNum;
-
+    private $day;
+    
     /** @var string */
     private $closeTime;
 
@@ -19,10 +19,10 @@ class WeekDay extends \Nette\Object implements I\Day {
 
     /**
      * 
-     * @param mixed $dayNum
+     * @param mixed $day YYYY-MM-DD format
      */
-    public function __construct($dayNum) {
-        $this->dayNum = (string) $dayNum;
+    public function __construct($day) {
+        $this->day = (string) $day;
     }
 
     /**

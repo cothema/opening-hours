@@ -6,6 +6,6 @@ namespace Cothema\OpeningHours\Resolver;
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class DefinedDay extends \Nette\Object {
+class SpecificDay extends \Nette\Object {
     
 }

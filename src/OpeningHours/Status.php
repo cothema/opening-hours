@@ -11,7 +11,7 @@ use \Nette\Utils\DateTime;
 class Status extends \Nette\Object {
 
     /** @var \Cothema\OpeningHours\Model\OpeningHours */
-    private $model;
+    private $openingHours;
 
     /** @var \Nette\Utils\DateTime */
     private $time;
@@ -21,10 +21,10 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @param \App\Components\OpeningHours\Model\OpeningHours $model
+     * @param \App\Components\OpeningHours\Model\OpeningHours $openingHours
      */
-    public function __construct(Model\OpeningHours $model) {
-        $this->model = $model;
+    public function __construct(Model\OpeningHours $openingHours) {
+        $this->openingHours = $openingHours;
         $this->warningClosingDiff = '+2 hours';
         $this->time = new DateTime();
     }
@@ -124,7 +124,7 @@ class Status extends \Nette\Object {
      */
     private function getStatusByTimeInDay(DateTime $time, $modify = '') {
         $day = (new DateTime($time))->modify($modify . ' ' . 'midnight');
-        $openingHours = $this->model->getDay($day->format('w'));
+        $openingHours = $this->openingHours->getDay($day);
 
         $todayOpen = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getOpenTime());
         $todayClose = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getCloseTime());
@@ -136,7 +136,7 @@ class Status extends \Nette\Object {
         }
 
         $resolver = new Resolver\WeekDay();
-        $resolver->setDay($day->format('w'));
+        $resolver->setDayNumber($day->format('w'));
         $status->setResolver($resolver);
 
         return $status;
@@ -159,7 +159,7 @@ class Status extends \Nette\Object {
 
         $status = $this->getStatus();
         if ($status instanceof \Cothema\OpeningHours\Status\Opened && !$this->isOpenedByTime($time->modify('+2 hours'))) {
-            return $this->closingAtByWeekDay($status->getResolver()->getDay());
+            return $this->closingAtByWeekDay($status->getResolver()->getDayNumber());
         }
 
         return FALSE;
@@ -170,7 +170,7 @@ class Status extends \Nette\Object {
      * @return string
      */
     private function closingAtByWeekDay($day) {
-        $closing = $this->getTimeMidnight()->modify($this->model->getDay($day)->getCloseTime());
+        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
         return $closing->format('H:i');
     }
 

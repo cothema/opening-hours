@@ -2,6 +2,8 @@
 
 namespace Cothema\OpeningHours\Model;
 
+use Nette\Utils\DateTime;
+
 /**
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
@@ -11,25 +13,42 @@ class OpeningHours extends \Nette\Object {
     /** @var array */
     private $openingHours;
 
+    /** @var array */
+    private $specificDays;
+
     public function __construct() {
         $this->openingHours = [];
+        $this->specificDays = [];
     }
 
     /**
      * 
-     * @param string $day
+     * @param DateTime $day
      * @return WeekDay
      */
-    public function getDay($day) {
-        return $this->openingHours[(string) $day];
+    public function getDay(DateTime $day) {
+        if (isset($this->specificDays[$day->format('Y-m-d')])) {
+            return $this->specificDays[$day->format('Y-m-d')];
+        }
+
+        return $this->openingHours[(string) $day->format('w')];
     }
-    
+
+    /**
+     * 
+     * @param string $weekDay
+     * @return WeekDay
+     */
+    public function getWeekDay($weekDay) {
+        return $this->openingHours[(string) $weekDay];
+    }
+
     /**
      * 
      * @return WeekDay
      */
     public function getToday() {
-        return $this->getDay(date('w'));
+        return $this->getDay(new DateTime);
     }
 
     /**
@@ -37,12 +56,32 @@ class OpeningHours extends \Nette\Object {
      * @param array $openingHours
      */
     public function setOpeningHours(array $openingHours) {
-        foreach($openingHours as $openingHourKey => $openingHour) {
+        foreach ($openingHours as $openingHourKey => $openingHour) {
             $weekDay = new WeekDay($openingHourKey);
             $weekDay->setOpenTime($openingHour[0]);
             $weekDay->setCloseTime($openingHour[1]);
             $this->openingHours[(string) $openingHourKey] = $weekDay;
         }
+    }
+
+    /**
+     * 
+     * @param string $day e.g. '2015-12-01'
+     * @param array $openingHours e.g. ['10:00', '11:00']
+     */
+    public function addSpecificDay($day, $openingHours) {
+        $specificDay = new SpecificDay($day);
+        $specificDay->setOpenTime($openingHours[0]);
+        $specificDay->setCloseTime($openingHours[1]);
+        $this->specificDays[$day] = $specificDay;
+    }
+
+    /**
+     * 
+     * @param string $day e.g. '2015-12-01'
+     */
+    public function getSpecificDay($day) {
+        return isset($this->specificDays[$day]) ? $this->specificDays[$day] : FALSE;
     }
 
 }

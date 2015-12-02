@@ -9,20 +9,20 @@ namespace Cothema\OpeningHours\Resolver;
 class WeekDay extends \Nette\Object {
 
     /** @var int Day number 0-6 (Sun - Sat) */
-    private $day;
+    private $dayNumber;
 
-    public function getDay() {
-        return $this->day;
+    public function getDayNumber() {
+        return $this->dayNumber;
     }
 
     /**
      * 
-     * @param int|string $day
+     * @param int|string $dayNumber
      * @throws \Exception
      */
-    public function setDay($day) {
-        if (is_numeric($day) && ($day >= 0 || $day <= 6)) {
-            $this->day = (int) $day;
+    public function setDayNumber($dayNumber) {
+        if (is_numeric($dayNumber) && ($dayNumber >= 0 || $dayNumber <= 6)) {
+            $this->dayNumber = (int) $dayNumber;
         } else {
             throw new \Exception('Invalid input!');
         }
