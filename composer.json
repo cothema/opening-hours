@@ -2,6 +2,7 @@
     "name": "cothema/opening-hours",
     "description": "Opening hours component",
     "type": "project",
+    "license": "MIT",
     "authors": [
         {
             "name": "Milos Havlicek"
