@@ -16,6 +16,20 @@ class Status extends \Tester\TestCase {
         return new Tested($openingHours);
     }
 
+    private function getOpeningHoursNonstop() {
+        $openingHours = new OpeningHours;
+        $openingHours->setOpeningHours([
+            '0' => TRUE, // Sunday
+            '1' => TRUE, // Monday
+            '2' => TRUE, // Tuesday
+            '3' => TRUE, // Wednesday
+            '4' => TRUE, // Thursday
+            '5' => TRUE, // Friday
+            '6' => TRUE // Saturday
+        ]);
+        return new Tested($openingHours);
+    }
+    
     private function getOpeningHours1() {
         $openingHours = new OpeningHours;
         $openingHours->setOpeningHours([
@@ -174,6 +188,16 @@ class Status extends \Tester\TestCase {
 
         Assert::false($openingHoursStatus->isOpened(), '1.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '1.2');
+    }
+    
+    public function testCaseOpenedNonstop() {
+        $openingHoursStatus = $this->getOpeningHoursNonstop();
+
+        $openingHoursStatus->setTime(new DateTime('2015-12-01 01:30:00')); // Tuesday
+
+        Assert::true($openingHoursStatus->isOpened(), '1.1');
+        Assert::false($openingHoursStatus->getClosingAtWarning(), '1.2');
+        Assert::true($openingHoursStatus->isOpenedNonstop(), '1.3');
     }
 
 }

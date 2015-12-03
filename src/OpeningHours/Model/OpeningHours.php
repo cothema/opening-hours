@@ -23,6 +23,40 @@ class OpeningHours extends \Nette\Object {
 
     /**
      * 
+     * @param string $day e.g. '2015-12-01'
+     * @param array|boolean $openingHours e.g. ['10:00', '11:00']
+     */
+    public function addSpecificDay($day, $openingHours) {
+        $specificDay = new SpecificDay($day);
+
+        if (is_array($openingHours)) {
+            $specificDay->setOpenTime($openingHours[0]);
+            $specificDay->setCloseTime($openingHours[1]);
+        } elseif ($openingHours === TRUE) {
+            $specificDay->setOpenTime('00:00');
+            $specificDay->setCloseTime('24:00');
+        } elseif ($openingHours === FALSE) {
+            // Closed all the day
+        } else {
+            throw new \Exception('Invalid $openingHours param format.');
+        }
+
+        $this->specificDays[$day] = $specificDay;
+    }
+
+    /**
+     * 
+     * @param array $days e.g. ['2015-12-01', '2015-12-02']
+     * @param array|boolean $openingHours e.g. ['10:00', '11:00']
+     */
+    public function addSpecificDays(array $days, $openingHours) {
+        foreach ($days as $day) {
+            $this->addSpecificDay($day, $openingHours);
+        }
+    }
+
+    /**
+     * 
      * @param DateTime|NULL $day
      * @return WeekDay
      */
@@ -37,11 +71,10 @@ class OpeningHours extends \Nette\Object {
 
     /**
      * 
-     * @param string $weekDay
-     * @return WeekDay
+     * @param string $day e.g. '2015-12-01'
      */
-    public function getWeekDay($weekDay) {
-        return $this->openingHours[(string) $weekDay];
+    public function getSpecificDay($day) {
+        return isset($this->specificDays[$day]) ? $this->specificDays[$day] : FALSE;
     }
 
     /**
@@ -54,54 +87,33 @@ class OpeningHours extends \Nette\Object {
 
     /**
      * 
+     * @param string $weekDay
+     * @return WeekDay
+     */
+    public function getWeekDay($weekDay) {
+        return $this->openingHours[(string) $weekDay];
+    }
+
+    /**
+     * 
      * @param array $openingHours
      */
     public function setOpeningHours(array $openingHours) {
         foreach ($openingHours as $openingHourKey => $openingHour) {
             $weekDay = new WeekDay($openingHourKey);
-            $weekDay->setOpenTime($openingHour[0]);
-            $weekDay->setCloseTime($openingHour[1]);
+
+            if ($openingHour === TRUE) {
+                $weekDay->setOpenTime('00:00');
+                $weekDay->setCloseTime('24:00');
+            } elseif ($openingHour === FALSE) {
+                // Closed all the day
+            } else {
+                $weekDay->setOpenTime($openingHour[0]);
+                $weekDay->setCloseTime($openingHour[1]);
+            }
+
             $this->openingHours[(string) $openingHourKey] = $weekDay;
         }
-    }
-
-    /**
-     * 
-     * @param string $day e.g. '2015-12-01'
-     * @param array|FALSE $openingHours e.g. ['10:00', '11:00']
-     */
-    public function addSpecificDay($day, $openingHours) {
-        $specificDay = new SpecificDay($day);
-
-        if (is_array($openingHours)) {
-            $specificDay->setOpenTime($openingHours[0]);
-            $specificDay->setCloseTime($openingHours[1]);
-        } elseif ($openingHours === FALSE) {
-            // Closed all the day
-        } else {
-            throw new \Exception('Invalid $openingHours param format.');
-        }
-
-        $this->specificDays[$day] = $specificDay;
-    }
-
-    /**
-     * 
-     * @param array $days e.g. ['2015-12-01', '2015-12-02']
-     * @param array|FALSE $openingHours e.g. ['10:00', '11:00']
-     */
-    public function addSpecificDays(array $days, $openingHours) {
-        foreach ($days as $day) {
-            $this->addSpecificDay($day, $openingHours);
-        }
-    }
-
-    /**
-     * 
-     * @param string $day e.g. '2015-12-01'
-     */
-    public function getSpecificDay($day) {
-        return isset($this->specificDays[$day]) ? $this->specificDays[$day] : FALSE;
     }
 
 }

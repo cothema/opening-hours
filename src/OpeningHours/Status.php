@@ -31,6 +31,15 @@ class Status extends \Nette\Object {
 
     /**
      * 
+     * @return string
+     */
+    private function closingAtByWeekDay($day) {
+        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
+        return $closing->format('H:i');
+    }
+
+    /**
+     * 
      * @return \Nette\Utils\DateTime
      */
     public function getTime() {
@@ -67,6 +76,21 @@ class Status extends \Nette\Object {
      */
     public function isOpened() {
         return $this->isOpenedByTime($this->time);
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isOpenedNonstop() {
+        $days = ['0', '1', '2', '3', '4', '5', '6'];
+        foreach ($days as $day) {
+            $openingHours = $this->openingHours->getWeekDay($day);
+            if (!($openingHours->getOpenTime('00:00') && $openingHours->getCloseTime('00:00'))) {
+                return FALSE;
+            }
+        }
+        return TRUE;
     }
 
     /**
@@ -125,7 +149,7 @@ class Status extends \Nette\Object {
     private function getStatusByTimeInDay(DateTime $time, $modify = '') {
         $day = (new DateTime($time))->modify($modify . ' ' . 'midnight');
         $openingHours = $this->openingHours->getDay($day);
-        if($openingHours === NULL) {
+        if ($openingHours === NULL) {
             return new Status\Closed;
         }
 
@@ -166,15 +190,6 @@ class Status extends \Nette\Object {
         }
 
         return FALSE;
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    private function closingAtByWeekDay($day) {
-        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
-        return $closing->format('H:i');
     }
 
 }
