@@ -125,6 +125,9 @@ class Status extends \Nette\Object {
     private function getStatusByTimeInDay(DateTime $time, $modify = '') {
         $day = (new DateTime($time))->modify($modify . ' ' . 'midnight');
         $openingHours = $this->openingHours->getDay($day);
+        if($openingHours === NULL) {
+            return new Status\Closed;
+        }
 
         $todayOpen = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getOpenTime());
         $todayClose = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getCloseTime());

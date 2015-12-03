@@ -23,15 +23,16 @@ class OpeningHours extends \Nette\Object {
 
     /**
      * 
-     * @param DateTime $day
+     * @param DateTime|NULL $day
      * @return WeekDay
      */
     public function getDay(DateTime $day) {
         if (isset($this->specificDays[$day->format('Y-m-d')])) {
             return $this->specificDays[$day->format('Y-m-d')];
+        } elseif (isset($this->openingHours[(string) $day->format('w')])) {
+            return $this->openingHours[(string) $day->format('w')];
         }
-
-        return $this->openingHours[(string) $day->format('w')];
+        return NULL;
     }
 
     /**

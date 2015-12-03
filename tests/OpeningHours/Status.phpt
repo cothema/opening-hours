@@ -11,6 +11,11 @@ require_once __DIR__ . '/../bootstrap.php';
 
 class Status extends \Tester\TestCase {
 
+    private function getEmptyHours() {
+        $openingHours = new OpeningHours;
+        return new Tested($openingHours);
+    }
+
     private function getOpeningHours1() {
         $openingHours = new OpeningHours;
         $openingHours->setOpeningHours([
@@ -140,26 +145,35 @@ class Status extends \Tester\TestCase {
 
         Assert::false($openingHoursStatus->isOpened(), '5.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '5.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-03 16:00:00'));
 
         Assert::false($openingHoursStatus->isOpened(), '6.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '6.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-04 16:00:00'));
 
         Assert::false($openingHoursStatus->isOpened(), '7.1');
         Assert::false($openingHoursStatus->getClosingAtWarning(), '7.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-03 10:30:00'));
 
         Assert::true($openingHoursStatus->isOpened(), '8.1');
         Assert::truthy($openingHoursStatus->getClosingAtWarning(), '8.2');
-        
+
         $openingHoursStatus->setTime(new DateTime('2015-12-04 10:30:00'));
 
         Assert::true($openingHoursStatus->isOpened(), '9.1');
         Assert::truthy($openingHoursStatus->getClosingAtWarning(), '9.2');
+    }
+
+    public function testCaseUndefined() {
+        $openingHoursStatus = $this->getEmptyHours();
+
+        $openingHoursStatus->setTime(new DateTime('2015-12-01 01:30:00')); // Tuesday
+
+        Assert::false($openingHoursStatus->isOpened(), '1.1');
+        Assert::false($openingHoursStatus->getClosingAtWarning(), '1.2');
     }
 
 }
