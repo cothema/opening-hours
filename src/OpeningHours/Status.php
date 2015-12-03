@@ -111,6 +111,16 @@ class Status extends \Nette\Object {
 
     /**
      * 
+     * @param \Nette\Utils\DateTime $timeFrom
+     * @param \Nette\Utils\DateTime $timeTo
+     * @return boolean
+     */
+    public function isOpenedByTimeRange(DateTime $timeFrom, DateTime $timeTo) {
+        throw new \Exception('Not yet implemented!');
+    }
+
+    /**
+     * 
      * @return \Cothema\OpeningHours\Status\I\Status
      */
     public function getStatus() {

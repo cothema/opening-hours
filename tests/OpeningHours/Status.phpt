@@ -199,6 +199,20 @@ class Status extends \Tester\TestCase {
         Assert::false($openingHoursStatus->getClosingAtWarning(), '1.2');
         Assert::true($openingHoursStatus->isOpenedNonstop(), '1.3');
     }
+    
+    public function testCaseTimeRange1() {
+        $openingHoursStatus = $this->getOpeningHoursNonstop();
+
+        $result = $openingHoursStatus->isOpenedByTimeRange(new DateTime('2015-11-28 10:00:00'), new DateTime('2015-12-02 08:00:00'));
+        Assert::true($result, '1.1');
+    }
+    
+    public function testCaseTimeRange2() {
+        $openingHoursStatus = $this->getEmptyHours();
+
+        $result = $openingHoursStatus->isOpenedByTimeRange(new DateTime('2015-11-28 10:00:00'), new DateTime('2015-12-02 08:00:00'));
+        Assert::false($result, '1.1');
+    }
 
 }
 
