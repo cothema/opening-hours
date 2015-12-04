@@ -19,6 +19,9 @@ class Status extends \Nette\Object {
     /** @var string */
     private $warningClosingDiff;
 
+    /** @var string */
+    private $warningOpeningDiff;
+
     /**
      * 
      * @param \App\Components\OpeningHours\Model\OpeningHours $openingHours
@@ -26,6 +29,7 @@ class Status extends \Nette\Object {
     public function __construct(Model\OpeningHours $openingHours) {
         $this->openingHours = $openingHours;
         $this->warningClosingDiff = '+2 hours';
+        $this->warningOpeningDiff = '+2 hours';
         $this->time = new DateTime();
     }
 
@@ -36,6 +40,15 @@ class Status extends \Nette\Object {
     private function closingAtByWeekDay($day) {
         $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
         return $closing->format('H:i');
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    private function openingAtByWeekDay($day) {
+        $opening = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getOpenTime());
+        return $opening->format('H:i');
     }
 
     /**
@@ -56,6 +69,14 @@ class Status extends \Nette\Object {
 
     /**
      * 
+     * @return string
+     */
+    public function getWarningOpeningDiff() {
+        return $this->warningOpeningDiff;
+    }
+
+    /**
+     * 
      * @param \Nette\Utils\DateTime $time
      */
     public function setTime(DateTime $time) {
@@ -68,6 +89,14 @@ class Status extends \Nette\Object {
      */
     public function setWarningClosingDiff($diff) {
         $this->warningClosingDiff = $diff;
+    }
+
+    /**
+     * 
+     * @param string $diff
+     */
+    public function setWarningOpeningDiff($diff) {
+        $this->warningOpeningDiff = $diff;
     }
 
     /**
@@ -195,8 +224,23 @@ class Status extends \Nette\Object {
         $time = new DateTime($this->time);
 
         $status = $this->getStatus();
-        if ($status instanceof \Cothema\OpeningHours\Status\Opened && !$this->isOpenedByTime($time->modify('+2 hours'))) {
+        if ($status instanceof \Cothema\OpeningHours\Status\Opened && !$this->isOpenedByTime($time->modify($this->warningClosingDiff))) {
             return $this->closingAtByWeekDay($status->getResolver()->getDayNumber());
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * 
+     * @return string|boolean
+     */
+    public function getOpeningAtWarning() {
+        $time = new DateTime($this->time);
+
+        $status = $this->getStatus();
+        if ($status instanceof \Cothema\OpeningHours\Status\Closed && $this->isOpenedByTime($time->modify($this->warningOpeningDiff))) {
+            return $this->openingAtByWeekDay($status->getResolver()->getDayNumber());
         }
 
         return FALSE;
