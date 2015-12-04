@@ -41,7 +41,7 @@ class Status extends \Nette\Object {
         $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
         return $closing->format('H:i');
     }
-    
+
     /**
      * 
      * @return string
@@ -236,11 +236,12 @@ class Status extends \Nette\Object {
      * @return string|boolean
      */
     public function getOpeningAtWarning() {
-        $time = new DateTime($this->time);
+        $timeModified = new DateTime($this->time);
+        $timeModified->modify($this->warningOpeningDiff);
 
         $status = $this->getStatus();
-        if ($status instanceof \Cothema\OpeningHours\Status\Closed && $this->isOpenedByTime($time->modify($this->warningOpeningDiff))) {
-            return $this->openingAtByWeekDay($status->getResolver()->getDayNumber());
+        if ($status instanceof \Cothema\OpeningHours\Status\Closed && $this->isOpenedByTime($timeModified)) {
+            return $this->openingAtByWeekDay($timeModified->format('w'));
         }
 
         return FALSE;
