@@ -18,9 +18,15 @@ class Line extends \Nette\Object {
 
     /** @var string */
     private $timeFrom;
+    
+    /** @var string */
+    private $timeFromFormatted;
 
     /** @var string */
     private $timeTo;
+    
+    /** @var string */
+    private $timeToFormatted;
 
     /**
      * 
@@ -45,6 +51,14 @@ class Line extends \Nette\Object {
     public function getTimeFrom() {
         return $this->timeFrom;
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getTimeFromFormatted() {
+        return $this->timeFromFormatted;
+    }
 
     /**
      * 
@@ -52,6 +66,14 @@ class Line extends \Nette\Object {
      */
     public function getTimeTo() {
         return $this->timeTo;
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getTimeToFormatted() {
+        return $this->timeToFormatted;
     }
 
     /**
@@ -79,6 +101,14 @@ class Line extends \Nette\Object {
     public function setTimeFrom($time) {
         $this->timeFrom = $time;
     }
+    
+    /**
+     * 
+     * @param string $time
+     */
+    public function setTimeFromFormatted($time) {
+        $this->timeFromFormatted = $time;
+    }
 
     /**
      * 
@@ -86,6 +116,14 @@ class Line extends \Nette\Object {
      */
     public function setTimeTo($time) {
         $this->timeTo = $time;
+    }
+    
+    /**
+     * 
+     * @param string $time
+     */
+    public function setTimeToFormatted($time) {
+        $this->timeToFormatted = $time;
     }
 
 }

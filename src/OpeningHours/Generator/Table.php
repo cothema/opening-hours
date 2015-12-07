@@ -2,6 +2,7 @@
 
 namespace Cothema\OpeningHours\Generator;
 
+use Cothema\OpeningHours\Filter\Time as FilterTime;
 use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Model\WeekTable;
 use Cothema\OpeningHours\Validator;
@@ -72,11 +73,11 @@ class Table extends \Nette\Object {
 
             $dayOpeningHours = $openingHours->getWeekDay($day);
 
-            $timeFrom = $dayOpeningHours->getOpenTime();
-            $timeTo = $dayOpeningHours->getCloseTime();
+            $timeFrom = (new FilterTime\Def($dayOpeningHours->getOpenTime()))->getOutput();
+            $timeTo = (new FilterTime\Def($dayOpeningHours->getCloseTime()))->getOutput();
             foreach ($this->timeFilters as $filter) {
-                $timeFrom = (new $filter($timeFrom))->getOutput();
-                $timeTo = (new $filter($timeTo))->getOutput();
+                $timeFromFormatted = (new $filter($timeFrom))->getOutput();
+                $timeToFormatted = (new $filter($timeTo))->getOutput();
             }
             if ($timeFrom === $lastTimeFrom && $timeTo === $lastTimeTo) {
                 $line->setDayTo($day);
@@ -86,7 +87,9 @@ class Table extends \Nette\Object {
                 $line->setDayFrom($day);
                 $line->setDayTo($day);
                 $line->setTimeFrom($timeFrom);
+                $line->setTimeFromFormatted($timeFromFormatted);
                 $line->setTimeTo($timeTo);
+                $line->setTimeToFormatted($timeToFormatted);
             }
 
             $lastTimeFrom = $timeFrom;
