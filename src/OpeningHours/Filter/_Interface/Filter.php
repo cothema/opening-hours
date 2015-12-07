@@ -1,6 +1,6 @@
 <?php
 
-namespace Cothema\OpeningHours\Filter\I\Filter;
+namespace Cothema\OpeningHours\Filter\I;
 
 interface Filter {
 

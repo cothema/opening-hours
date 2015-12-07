@@ -22,7 +22,7 @@ class Table extends \Nette\Object {
     private $firstDayInWeek = 1;
 
     /** @var array */
-    private $timeFilters;
+    private $timeFilters = [];
     
     /**
      * 
