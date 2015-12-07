@@ -21,12 +21,30 @@ class Table extends \Nette\Object {
     /** @var int */
     private $firstDayInWeek = 1;
 
+    /** @var array */
+    private $timeFilters;
+    
     /**
      * 
      * @param OpeningHours $openingHours
      */
     public function __construct(OpeningHours $openingHours) {
         $this->openingHours = $openingHours;
+    }
+    
+    /**
+     * 
+     * @param string $filter e.g. Time\Simple
+     * @throws \Exception
+     */
+    public function addTimeFilter($filter) {
+        $filterClass = '\\Cothema\\OpeningHours\\Filter\\'.$filter;
+        
+        if(!class_exists($filterClass)) {
+            throw new \Exception('Filter class "'.$filterClass.'" does not exists.');
+        }
+        
+        $this->timeFilters[] = $filterClass;
     }
 
     private function generate() {
@@ -55,6 +73,10 @@ class Table extends \Nette\Object {
 
             $timeFrom = $dayOpeningHours->getOpenTime();
             $timeTo = $dayOpeningHours->getCloseTime();
+            foreach($this->timeFilters as $filter) {
+                $timeFrom = (new $filter($timeFrom))->getOutput();
+                $timeTo = (new $filter($timeTo))->getOutput();
+            }
             if ($timeFrom === $lastTimeFrom && $timeTo === $lastTimeTo) {
                 $line->setDayTo($day);
             } else {
