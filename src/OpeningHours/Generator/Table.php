@@ -23,27 +23,28 @@ class Table extends \Nette\Object {
 
     /** @var array */
     private $timeFilters = [];
-    
+
     /**
      * 
      * @param OpeningHours $openingHours
      */
     public function __construct(OpeningHours $openingHours) {
         $this->openingHours = $openingHours;
+        $this->addTimeFilter('Time\Def');
     }
-    
+
     /**
      * 
      * @param string $filter e.g. Time\Simple
      * @throws \Exception
      */
     public function addTimeFilter($filter) {
-        $filterClass = '\\Cothema\\OpeningHours\\Filter\\'.$filter;
-        
-        if(!class_exists($filterClass)) {
-            throw new \Exception('Filter class "'.$filterClass.'" does not exists.');
+        $filterClass = '\\Cothema\\OpeningHours\\Filter\\' . $filter;
+
+        if (!class_exists($filterClass)) {
+            throw new \Exception('Filter class "' . $filterClass . '" does not exists.');
         }
-        
+
         $this->timeFilters[] = $filterClass;
     }
 
@@ -60,7 +61,7 @@ class Table extends \Nette\Object {
         $lastTimeTo = NULL;
         $started = FALSE;
         foreach ($days as $day) {
-            if(!$started && $day !== $this->firstDayInWeek) {
+            if (!$started && $day !== $this->firstDayInWeek) {
                 continue;
             }
             $started = TRUE;
@@ -73,7 +74,7 @@ class Table extends \Nette\Object {
 
             $timeFrom = $dayOpeningHours->getOpenTime();
             $timeTo = $dayOpeningHours->getCloseTime();
-            foreach($this->timeFilters as $filter) {
+            foreach ($this->timeFilters as $filter) {
                 $timeFrom = (new $filter($timeFrom))->getOutput();
                 $timeTo = (new $filter($timeTo))->getOutput();
             }
