@@ -30,7 +30,7 @@ class Table extends \Nette\Object {
      */
     public function __construct(OpeningHours $openingHours) {
         $this->openingHours = $openingHours;
-        $this->addTimeFilter('Time\Def');
+        $this->addTimeFilter('Time\\Def');
     }
 
     /**
