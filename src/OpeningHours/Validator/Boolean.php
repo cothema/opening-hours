@@ -15,7 +15,7 @@ class Boolean extends \Nette\Object implements I\Validator {
      * @return TRUE
      */
     public static function validate($boolean) {
-        if (!is_int($boolean)) {
+        if (!is_bool($boolean)) {
             throw new \Exception('Input have to be boolean.');
         }
 
