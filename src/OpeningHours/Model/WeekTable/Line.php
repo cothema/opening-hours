@@ -12,7 +12,7 @@ class Line extends \Nette\Object {
 
     /** @var boolean */
     private $active = FALSE;
-    
+
     /** @var int */
     private $dayFrom;
 
@@ -21,13 +21,13 @@ class Line extends \Nette\Object {
 
     /** @var string */
     private $timeFrom;
-    
+
     /** @var string */
     private $timeFromFormatted;
 
     /** @var string */
     private $timeTo;
-    
+
     /** @var string */
     private $timeToFormatted;
 
@@ -36,9 +36,17 @@ class Line extends \Nette\Object {
      * @return boolean
      */
     public function getActive() {
+        return $this->isActive();
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isActive() {
         return $this->active;
     }
-    
+
     /**
      * 
      * @return int
@@ -62,7 +70,7 @@ class Line extends \Nette\Object {
     public function getTimeFrom() {
         return $this->timeFrom;
     }
-    
+
     /**
      * 
      * @return string
@@ -78,7 +86,7 @@ class Line extends \Nette\Object {
     public function getTimeTo() {
         return $this->timeTo;
     }
-    
+
     /**
      * 
      * @return string
@@ -95,7 +103,7 @@ class Line extends \Nette\Object {
         Validator\Boolean::validate($active);
         $this->active = $active;
     }
-    
+
     /**
      * 
      * @param int $dayNum
@@ -121,7 +129,7 @@ class Line extends \Nette\Object {
     public function setTimeFrom($time) {
         $this->timeFrom = $time;
     }
-    
+
     /**
      * 
      * @param string $time
@@ -137,7 +145,7 @@ class Line extends \Nette\Object {
     public function setTimeTo($time) {
         $this->timeTo = $time;
     }
-    
+
     /**
      * 
      * @param string $time

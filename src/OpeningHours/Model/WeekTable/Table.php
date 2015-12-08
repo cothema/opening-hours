@@ -8,14 +8,31 @@ namespace Cothema\OpeningHours\Model\WeekTable;
  */
 class Table extends \Nette\Object {
 
+    /** @var array */
     private $lines = [];
-    
+
+    /**
+     * 
+     * @param \Cothema\OpeningHours\Model\WeekTable\Line $line
+     */
     public function addLine(Line $line) {
         $this->lines[] = $line;
     }
-    
-    public function getLines() {
-        return $this->lines;
+
+    /**
+     * 
+     * @param boolean $skipClosed Skip lines with closed days
+     * @return array
+     */
+    public function getLines($skipClosed = FALSE) {
+        $lines = $this->lines;
+        if ($skipClosed) {
+            $lines = array_filter($lines, function($item) {
+                return (bool) $item->getTimeFrom();
+            });
+        }
+
+        return $lines;
     }
-    
+
 }

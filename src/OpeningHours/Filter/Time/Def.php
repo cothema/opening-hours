@@ -5,6 +5,10 @@ namespace Cothema\OpeningHours\Filter\Time;
 class Def extends \Cothema\OpeningHours\Filter\A\Filter implements \Cothema\OpeningHours\Filter\I\Filter {
 
     protected function apply() {
+        if(is_bool($this->input)) {
+            $this->output = $this->input;
+            return;
+        }
         $input = new \DateTime($this->input);
         $processed = $input->format('H:i');
         if ($processed === '00:00') {
