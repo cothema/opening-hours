@@ -92,6 +92,10 @@ class Table extends \Nette\Object {
                 $line->setTimeToFormatted($timeToFormatted);
             }
 
+            if((string)$day === (string)date('w')) {
+                $line->setActive();
+            }
+
             $lastTimeFrom = $timeFrom;
             $lastTimeTo = $timeTo;
         }

@@ -10,6 +10,9 @@ use Cothema\OpeningHours\Validator;
  */
 class Line extends \Nette\Object {
 
+    /** @var boolean */
+    private $active = FALSE;
+    
     /** @var int */
     private $dayFrom;
 
@@ -28,6 +31,14 @@ class Line extends \Nette\Object {
     /** @var string */
     private $timeToFormatted;
 
+    /**
+     * 
+     * @return boolean
+     */
+    public function getActive() {
+        return $this->active;
+    }
+    
     /**
      * 
      * @return int
@@ -76,6 +87,15 @@ class Line extends \Nette\Object {
         return $this->timeToFormatted;
     }
 
+    /**
+     * 
+     * @param boolean $active
+     */
+    public function setActive($active = TRUE) {
+        Validator\Boolean::validate($active);
+        $this->active = $active;
+    }
+    
     /**
      * 
      * @param int $dayNum
