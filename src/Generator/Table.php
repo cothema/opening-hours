@@ -2,10 +2,10 @@
 
 namespace Cothema\OpeningHours\Generator;
 
-use Cothema\OpeningHours\Filter\Time as FilterTime;
 use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Model\WeekTable;
-use Cothema\OpeningHours\Validator;
+use Cothema\Time\Filter\Time as FilterTime;
+use Cothema\Time\Validator;
 
 /**
  * 
@@ -40,7 +40,7 @@ class Table extends \Nette\Object {
      * @throws \Exception
      */
     public function addTimeFilter($filter) {
-        $filterClass = '\\Cothema\\OpeningHours\\Filter\\' . $filter;
+        $filterClass = '\\Cothema\\Time\\Filter\\' . $filter;
 
         if (!class_exists($filterClass)) {
             throw new \Exception('Filter class "' . $filterClass . '" does not exists.');

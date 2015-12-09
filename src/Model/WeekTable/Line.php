@@ -2,7 +2,7 @@
 
 namespace Cothema\OpeningHours\Model\WeekTable;
 
-use Cothema\OpeningHours\Validator;
+use Cothema\Time\Validator;
 
 /**
  * 

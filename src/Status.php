@@ -116,7 +116,7 @@ class Status extends \Nette\Object {
         foreach ($days as $day) {
             $openingHours = $this->openingHours->getWeekDay($day);
 
-            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '00:00')) {
+            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '24:00')) {
                 return FALSE;
             }
         }
