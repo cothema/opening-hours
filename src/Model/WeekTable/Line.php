@@ -49,6 +49,14 @@ class Line extends \Nette\Object {
 
     /**
      * 
+     * @return boolean
+     */
+    public function isAllWeek() {
+        return ($this->getDayFrom() === 1 && $this->getDayTo() === 0) || ($this->getDayFrom() === 0 && $this->getDayTo() === 6);
+    }
+    
+    /**
+     * 
      * @return int
      */
     public function getDayFrom() {
