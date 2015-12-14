@@ -8,10 +8,7 @@ use Cothema\Time\Validator;
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class Line extends \Nette\Object {
-
-    /** @var boolean */
-    private $active = FALSE;
+class Line extends \Cothema\OpeningHours\Model\Table\Line {
 
     /** @var int */
     private $dayFrom;
@@ -19,42 +16,6 @@ class Line extends \Nette\Object {
     /** @var int */
     private $dayTo;
 
-    /** @var string */
-    private $timeFrom;
-
-    /** @var string */
-    private $timeFromFormatted;
-
-    /** @var string */
-    private $timeTo;
-
-    /** @var string */
-    private $timeToFormatted;
-
-    /**
-     * 
-     * @return boolean
-     */
-    public function getActive() {
-        return $this->isActive();
-    }
-
-    /**
-     * 
-     * @return boolean
-     */
-    public function isActive() {
-        return $this->active;
-    }
-
-    /**
-     * 
-     * @return boolean
-     */
-    public function isAllWeek() {
-        return ($this->getDayFrom() === 1 && $this->getDayTo() === 0) || ($this->getDayFrom() === 0 && $this->getDayTo() === 6);
-    }
-    
     /**
      * 
      * @return int
@@ -73,43 +34,10 @@ class Line extends \Nette\Object {
 
     /**
      * 
-     * @return string
+     * @return boolean
      */
-    public function getTimeFrom() {
-        return $this->timeFrom;
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    public function getTimeFromFormatted() {
-        return $this->timeFromFormatted;
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    public function getTimeTo() {
-        return $this->timeTo;
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    public function getTimeToFormatted() {
-        return $this->timeToFormatted;
-    }
-
-    /**
-     * 
-     * @param boolean $active
-     */
-    public function setActive($active = TRUE) {
-        Validator\Boolean::validate($active);
-        $this->active = $active;
+    public function isAllWeek() {
+        return ($this->getDayFrom() === 1 && $this->getDayTo() === 0) || ($this->getDayFrom() === 0 && $this->getDayTo() === 6);
     }
 
     /**
@@ -128,38 +56,6 @@ class Line extends \Nette\Object {
     public function setDayTo($dayNum) {
         Validator\WeekDayNumber::validate($dayNum);
         $this->dayTo = $dayNum;
-    }
-
-    /**
-     * 
-     * @param string $time
-     */
-    public function setTimeFrom($time) {
-        $this->timeFrom = $time;
-    }
-
-    /**
-     * 
-     * @param string $time
-     */
-    public function setTimeFromFormatted($time) {
-        $this->timeFromFormatted = $time;
-    }
-
-    /**
-     * 
-     * @param string $time
-     */
-    public function setTimeTo($time) {
-        $this->timeTo = $time;
-    }
-
-    /**
-     * 
-     * @param string $time
-     */
-    public function setTimeToFormatted($time) {
-        $this->timeToFormatted = $time;
     }
 
 }
