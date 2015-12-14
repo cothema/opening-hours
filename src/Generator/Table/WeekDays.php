@@ -1,6 +1,6 @@
 <?php
 
-namespace Cothema\OpeningHours\Generator;
+namespace Cothema\OpeningHours\Generator\Table;
 
 use Cothema\OpeningHours\Model\WeekTable;
 use Cothema\Time\Filter\Time as FilterTime;
