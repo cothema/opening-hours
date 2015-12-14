@@ -13,7 +13,7 @@ class Sheet extends \Nette\Object {
 
     /**
      * 
-     * @param \Cothema\OpeningHours\Model\WeekTable\Line $line
+     * @param \Cothema\OpeningHours\Model\Table\Line $line
      */
     public function addLine(Line $line) {
         $this->lines[] = $line;

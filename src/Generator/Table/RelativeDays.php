@@ -3,6 +3,7 @@
 namespace Cothema\OpeningHours\Generator\Table;
 
 use Cothema\OpeningHours\Model\Table;
+use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
@@ -15,23 +16,23 @@ class RelativeDays extends A\Table {
     private $previousDays = 0;
 
     /** @var integer */
-    private $nextDays = 3;
+    private $nextDays = 2;
 
     protected function generate() {
         $openingHours = $this->openingHours;
 
         $days = $this->getRelativeDays();
 
-        $table = new Table\Table;
+        $table = new Table\Sheet;
 
         foreach ($days as $day) {
             $line = new Table\Line;
             if ($day === 0) {
                 $line->setActive();
             }
-            
+
             $now = new DateTime();
-            $dayOpeningHours = $openingHours->getDay($day === 0 ? $now : $now->modifyClone($day > 0 ? '+' : '-' .$day.' days'));
+            $dayOpeningHours = $openingHours->getDay($day === 0 ? $now : $now->modifyClone(($day > 0 ? '+' : '-') . $day . ' days'));
             $timeFrom = (new FilterTime\Def($dayOpeningHours->getOpenTime()))->getOutput();
             $timeTo = (new FilterTime\Def($dayOpeningHours->getCloseTime()))->getOutput();
             foreach ($this->timeFilters as $filter) {
@@ -44,6 +45,7 @@ class RelativeDays extends A\Table {
             $line->setTimeFromFormatted($timeFromFormatted);
             $line->setTimeTo($timeTo);
             $line->setTimeToFormatted($timeToFormatted);
+            $table->addLine($line);
         }
 
         $this->generatedTable = $table;

@@ -12,13 +12,13 @@ use Cothema\OpeningHours\Model\WeekTable;
 class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Table\I\Table {
 
     /** @var OpeningHours */
-    private $openingHours;
+    protected $openingHours;
 
     /** @var WeekTable\Table */
-    private $generatedTable;
+    protected $generatedTable;
 
     /** @var array */
-    private $timeFilters = [];
+    protected $timeFilters = [];
 
     /**
      * 
@@ -48,10 +48,6 @@ class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Tab
         
     }
 
-    /**
-     * 
-     * @return array
-     */
     public function getTable() {
         $this->generate();
         return $this->generatedTable;
