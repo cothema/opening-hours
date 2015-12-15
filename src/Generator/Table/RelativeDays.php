@@ -45,6 +45,9 @@ class RelativeDays extends A\Table {
             $line->setTimeFromFormatted($timeFromFormatted);
             $line->setTimeTo($timeTo);
             $line->setTimeToFormatted($timeToFormatted);
+            if ($dayOpeningHours instanceof \Cothema\OpeningHours\Model\SpecificDay) {
+                $line->specific = TRUE;
+            }
             $table->addLine($line);
         }
 

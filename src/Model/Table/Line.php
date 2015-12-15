@@ -16,6 +16,12 @@ class Line extends \Nette\Object {
     /** @var string */
     private $title;
 
+    /** @var \DateTime */
+    public $dateFrom;
+
+    /** @var \DateTime */
+    public $dateTo;
+
     /** @var string */
     private $timeFrom;
 
@@ -27,6 +33,9 @@ class Line extends \Nette\Object {
 
     /** @var string */
     private $timeToFormatted;
+
+    /** @var boolean */
+    public $specific;
 
     /**
      * 
@@ -132,5 +141,5 @@ class Line extends \Nette\Object {
     public function setTitle($title) {
         $this->title = $title;
     }
-    
+
 }

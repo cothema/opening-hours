@@ -24,31 +24,50 @@ class SpecificDays extends A\Table {
         $days = $this->getSpecificDays();
 
         $table = new Table\Sheet;
-/*
+
+        $line = new Table\Line;
+        $lastTimeFrom = NULL;
+        $lastTimeTo = NULL;
+        $now = new DateTime();
+
         foreach ($days as $day) {
-            $line = new Table\Line;
-            if ($day === 0) {
+            $timeFrom = (new FilterTime\Def($day->getOpenTime()))->getOutput();
+            $timeTo = (new FilterTime\Def($day->getCloseTime()))->getOutput();
+
+            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo) {
+                $line->dateTo = $day->getDay();
+            } else {
+                ($lastTimeTo !== NULL) && $table->addLine($line);
+                $line = new Table\Line;
+                $line->dateFrom = $day->getDay();
+                $line->dateTo = $day->getDay();
+                $this->lineAddTime($line, $timeFrom, $timeTo);
+            }
+
+            if ($day->getDay()->format('Y-m-d') === $now->format('Y-m-d')) {
                 $line->setActive();
             }
 
-            $now = new DateTime();
-            $dayOpeningHours = $openingHours->getDay($day === 0 ? $now : $now->modifyClone(($day > 0 ? '+' : '-') . $day . ' days'));
-            $timeFrom = (new FilterTime\Def($dayOpeningHours->getOpenTime()))->getOutput();
-            $timeTo = (new FilterTime\Def($dayOpeningHours->getCloseTime()))->getOutput();
-            foreach ($this->timeFilters as $filter) {
-                $timeFromFormatted = (new $filter($timeFrom))->getOutput();
-                $timeToFormatted = (new $filter($timeTo))->getOutput();
-            }
-
-            $line->setTitle($day);
-            $line->setTimeFrom($timeFrom);
-            $line->setTimeFromFormatted($timeFromFormatted);
-            $line->setTimeTo($timeTo);
-            $line->setTimeToFormatted($timeToFormatted);
-            $table->addLine($line);
+            $lastTimeFrom = $timeFrom;
+            $lastTimeTo = $timeTo;
         }
-*/
+
+        ($lastTimeTo !== NULL) && $table->addLine($line);
+
         $this->generatedTable = $table;
+    }
+
+    private function lineAddTime($line, $timeFrom, $timeTo) {
+        foreach ($this->timeFilters as $filter) {
+            $timeFromFormatted = (new $filter($timeFrom))->getOutput();
+            $timeToFormatted = (new $filter($timeTo))->getOutput();
+        }
+
+        $line->setTimeFrom($timeFrom);
+        $line->setTimeFromFormatted($timeFromFormatted);
+        $line->setTimeTo($timeTo);
+        $line->setTimeToFormatted($timeToFormatted);
+        return $line;
     }
 
     private function getSpecificDays() {

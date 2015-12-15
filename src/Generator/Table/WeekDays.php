@@ -48,7 +48,7 @@ class WeekDays extends A\Table {
             if ($timeFrom === $lastTimeFrom && $timeTo === $lastTimeTo) {
                 $line->setDayTo($day);
             } else {
-                isset($lastTimeTo) && $weekTable->addLine($line);
+                ($lastTimeTo !== NULL) && $weekTable->addLine($line);
                 $line = new WeekTable\Line;
                 $line->setDayFrom($day);
                 $line->setDayTo($day);
@@ -66,7 +66,7 @@ class WeekDays extends A\Table {
             $lastTimeTo = $timeTo;
         }
 
-        isset($lastTimeTo) && $weekTable->addLine($line);
+        ($lastTimeTo !== NULL) && $weekTable->addLine($line);
 
         $this->generatedTable = $weekTable;
     }
