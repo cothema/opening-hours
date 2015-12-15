@@ -57,6 +57,29 @@ class OpeningHours extends \Nette\Object {
 
     /**
      * 
+     * @param integer $nextDays
+     * @return array
+     */
+    public function getSpecificDays($nextDays = 30, $previousDays = 0) {
+        $now = new \DateTime;
+        return array_filter($this->specificDays, function($val, $key) use ($now, $nextDays, $previousDays) {
+            $time = new \DateTime($key);
+            $diff = (int) $now->diff($time)->format('%r%a');
+            return ($diff >= ($previousDays * -1) && $diff <= $nextDays);
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * 
+     * @param integer $nextDays
+     * @return boolean
+     */
+    public function getChangesAvailable($nextDays = 30) {
+        return (bool) count($this->getSpecificDays($nextDays));
+    }
+
+    /**
+     * 
      * @param DateTime|NULL $day
      * @return WeekDay
      */

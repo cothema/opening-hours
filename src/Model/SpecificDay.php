@@ -9,7 +9,7 @@ namespace Cothema\OpeningHours\Model;
 class SpecificDay extends \Nette\Object implements I\Day {
 
     use T\Day;
-    
+
     /** @var string */
     private $day;
 
@@ -19,6 +19,22 @@ class SpecificDay extends \Nette\Object implements I\Day {
      */
     public function __construct($day) {
         $this->day = (string) $day;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isActive() {
+        return $this->day === date('Y-m-d');
+    }
+
+    /**
+     * 
+     * @return \DateTime
+     */
+    public function getDay() {
+        return new \DateTime($this->day);
     }
 
 }
