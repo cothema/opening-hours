@@ -7,7 +7,7 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- * 
+ *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
 class SpecificDays extends A\Table {
@@ -28,19 +28,22 @@ class SpecificDays extends A\Table {
         $line = new Table\Line;
         $lastTimeFrom = NULL;
         $lastTimeTo = NULL;
+        $lastDay = NULL;
+        $lastTags = NULL;
         $now = new DateTime();
 
         foreach ($days as $day) {
             $timeFrom = (new FilterTime\Def($day->getOpenTime()))->getOutput();
             $timeTo = (new FilterTime\Def($day->getCloseTime()))->getOutput();
 
-            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo) {
+            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo && $lastTags === $day->tags && $lastDay !== NULL && (int) $lastDay->getDay()->diff($day->getDay())->format('%r%a') === 1) {
                 $line->dateTo = $day->getDay();
             } else {
                 ($lastTimeTo !== NULL) && $table->addLine($line);
                 $line = new Table\Line;
                 $line->dateFrom = $day->getDay();
                 $line->dateTo = $day->getDay();
+                $line->tags = $day->tags;
                 $this->lineAddTime($line, $timeFrom, $timeTo);
             }
 
@@ -48,8 +51,10 @@ class SpecificDays extends A\Table {
                 $line->setActive();
             }
 
+            $lastTags = $day->tags;
             $lastTimeFrom = $timeFrom;
             $lastTimeTo = $timeTo;
+            $lastDay = $day;
         }
 
         ($lastTimeTo !== NULL) && $table->addLine($line);

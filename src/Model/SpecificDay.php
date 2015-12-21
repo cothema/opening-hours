@@ -12,6 +12,9 @@ class SpecificDay extends \Nette\Object implements I\Day {
 
     /** @var string */
     private $day;
+    
+    /** @var array */
+    private $tags = [];
 
     /**
      * 
@@ -35,6 +38,22 @@ class SpecificDay extends \Nette\Object implements I\Day {
      */
     public function getDay() {
         return new \DateTime($this->day);
+    }
+    
+    /**
+     * 
+     * @param string $string
+     */
+    public function addTag($string) {
+        $this->tags[] = $string;
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getTags() {
+        return $this->tags;
     }
 
 }

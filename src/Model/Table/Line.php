@@ -37,6 +37,9 @@ class Line extends \Nette\Object {
     /** @var boolean */
     public $specific;
 
+    /** @var array */
+    public $tags = [];
+    
     /**
      * 
      * @return boolean

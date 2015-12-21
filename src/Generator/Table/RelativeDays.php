@@ -7,7 +7,7 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- * 
+ *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
 class RelativeDays extends A\Table {
@@ -45,6 +45,7 @@ class RelativeDays extends A\Table {
             $line->setTimeFromFormatted($timeFromFormatted);
             $line->setTimeTo($timeTo);
             $line->setTimeToFormatted($timeToFormatted);
+            $line->tags = $dayOpeningHours->tags;
             if ($dayOpeningHours instanceof \Cothema\OpeningHours\Model\SpecificDay) {
                 $line->specific = TRUE;
             }

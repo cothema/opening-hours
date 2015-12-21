@@ -24,7 +24,7 @@ class OpeningHours extends \Nette\Object {
     /**
      * 
      * @param string $day e.g. '2015-12-01'
-     * @param array|boolean $openingHours e.g. ['10:00', '11:00']
+     * @param array|boolean|string $openingHours e.g. ['10:00', '11:00'] OR FALSE OR 'ByAgreement' OR 'ByAgreementPhone'
      */
     public function addSpecificDay($day, $openingHours) {
         $specificDay = new SpecificDay($day);
@@ -37,6 +37,18 @@ class OpeningHours extends \Nette\Object {
             $specificDay->setCloseTime('24:00');
         } elseif ($openingHours === FALSE) {
             // Closed all the day
+        } elseif (is_string($openingHours)) {
+            if ($openingHours === 'ByAgreement') {
+                $specificDay->addTag('ByAgreement');
+                $specificDay->setOpenTime('00:00');
+                $specificDay->setCloseTime('24:00');
+            } elseif ($openingHours === 'ByPhoneAgreement') {
+                $specificDay->addTag('ByPhoneAgreement');
+                $specificDay->setOpenTime('00:00');
+                $specificDay->setCloseTime('24:00');
+            } else {
+                throw new \Exception('Invalid $openingHours param string.');
+            }
         } else {
             throw new \Exception('Invalid $openingHours param format.');
         }
