@@ -9,7 +9,9 @@ namespace Cothema\OpeningHours\Tag\A;
 abstract class Tag extends \Nette\Object {
     
     public function __toString() {
-        return $this->reflection->name;
+        $class = $this->reflection->name;
+        $exploded = explode('\\',$class);
+        return $exploded[count($exploded) - 1];
     }
     
 }

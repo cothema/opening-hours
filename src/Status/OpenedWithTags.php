@@ -8,6 +8,6 @@ namespace Cothema\OpeningHours\Status;
  */
 class OpenedWithTags extends A\Status {
 
-    use Cothema\OpeningHours\T\Tags;
+    use \Cothema\OpeningHours\T\Tags;
 
 }
