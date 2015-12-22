@@ -33,21 +33,21 @@ class SpecificDays extends A\Table {
         $now = new DateTime();
 
         foreach ($days as $day) {
-            $timeFrom = (new FilterTime\Def($day->getOpenTime()))->getOutput();
-            $timeTo = (new FilterTime\Def($day->getCloseTime()))->getOutput();
+            $timeFrom = (new FilterTime\Def($day->openTime))->output;
+            $timeTo = (new FilterTime\Def($day->closeTime))->output;
 
-            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo && $lastTags === $day->tags && $lastDay !== NULL && (int) $lastDay->getDay()->diff($day->getDay())->format('%r%a') === 1) {
-                $line->dateTo = $day->getDay();
+            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo && $this->tagsAreSame($lastTags, $day->tags) && $lastDay !== NULL && (int) $lastDay->day->diff($day->day)->format('%r%a') === 1) {
+                $line->dateTo = $day->day;
             } else {
                 ($lastTimeTo !== NULL) && $table->addLine($line);
                 $line = new Table\Line;
-                $line->dateFrom = $day->getDay();
-                $line->dateTo = $day->getDay();
+                $line->dateFrom = $day->day;
+                $line->dateTo = $day->day;
                 $line->tags = $day->tags;
                 $this->lineAddTime($line, $timeFrom, $timeTo);
             }
 
-            if ($day->getDay()->format('Y-m-d') === $now->format('Y-m-d')) {
+            if ($day->day->format('Y-m-d') === $now->format('Y-m-d')) {
                 $line->setActive();
             }
 
@@ -60,6 +60,30 @@ class SpecificDays extends A\Table {
         ($lastTimeTo !== NULL) && $table->addLine($line);
 
         $this->generatedTable = $table;
+    }
+
+    /**
+     * 
+     * @param array $tagsA
+     * @param array $tagsB
+     * @return boolean;
+     */
+    private function tagsAreSame(array $tagsA, array $tagsB) {
+        if ($tagsA === $tagsB) {
+            return TRUE;
+        }
+
+        if (count($tagsA) !== count($tagsB)) {
+            return FALSE;
+        }
+
+        for ($i = 0; $i < count($tagsA); $i++) {
+            if (!(string) $tagsA[$i] === (string) $tagsB[$i]) {
+                return FALSE;
+            }
+        }
+
+        return TRUE;
     }
 
     private function lineAddTime($line, $timeFrom, $timeTo) {
