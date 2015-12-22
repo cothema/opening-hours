@@ -38,17 +38,10 @@ class OpeningHours extends \Nette\Object {
         } elseif ($openingHours === FALSE) {
             // Closed all the day
         } elseif (is_string($openingHours)) {
-            if ($openingHours === 'ByAgreement') {
-                $specificDay->addTag('ByAgreement');
-                $specificDay->setOpenTime('00:00');
-                $specificDay->setCloseTime('24:00');
-            } elseif ($openingHours === 'ByPhoneAgreement') {
-                $specificDay->addTag('ByPhoneAgreement');
-                $specificDay->setOpenTime('00:00');
-                $specificDay->setCloseTime('24:00');
-            } else {
-                throw new \Exception('Invalid $openingHours param string.');
-            }
+            // Opened with tags (e.g. by agreement)
+            $specificDay->addTagString($openingHours);
+            $specificDay->setOpenTime('00:00');
+            $specificDay->setCloseTime('24:00');
         } else {
             throw new \Exception('Invalid $openingHours param format.');
         }

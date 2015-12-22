@@ -168,7 +168,7 @@ class Status extends \Nette\Object {
         foreach ($days as $day) {
             $iStatus = $this->getStatusByTimeInDay($time, $day);
 
-            if ($iStatus instanceof Status\Opened) {
+            if ($iStatus instanceof Status\Opened || $iStatus instanceof Status\OpenedWithTags) {
                 $status = $iStatus;
                 break;
             }
@@ -197,7 +197,13 @@ class Status extends \Nette\Object {
         $todayClose = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getCloseTime());
 
         if (($time >= $todayOpen && $time < $todayClose)) {
-            $status = new Status\Opened;
+            $tags = $openingHours->tags;
+            if (count($tags)) {
+                $status = new Status\OpenedWithTags;
+                $status->setTags($tags);
+            } else {
+                $status = new Status\Opened;
+            }
         } else {
             $status = new Status\Closed;
         }
