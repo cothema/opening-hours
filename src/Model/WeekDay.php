@@ -6,7 +6,7 @@ namespace Cothema\OpeningHours\Model;
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class WeekDay extends \Nette\Object implements I\Day {
+class WeekDay extends A\Day implements I\Day {
 
     use T\Day;
     
