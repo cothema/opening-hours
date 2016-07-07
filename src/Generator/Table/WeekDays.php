@@ -7,6 +7,7 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Cothema\Time\Validator;
 
 /**
+ * Generator for week days table (e.g. mon-fri: 8 AM - 6 PM, sat, sun: closed) 
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
@@ -15,6 +16,9 @@ class WeekDays extends A\Table {
     /** @var int */
     private $firstDayInWeek = 1;
 
+    /**
+     * Generate table
+     */
     protected function generate() {
         $openingHours = $this->openingHours;
 

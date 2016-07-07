@@ -1,11 +1,11 @@
 <?php
 
-namespace Cothema\OpeningHours\Tag;
+namespace Cothema\OpeningHours\Model\Status;
 
 /**
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class ByAgreement extends A\Tag {
+class Opened extends A\Status {
     
 }

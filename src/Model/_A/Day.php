@@ -8,6 +8,6 @@ namespace Cothema\OpeningHours\Model\A;
  */
 abstract class Day extends \Nette\Object {
 
-    use \Cothema\OpeningHours\T\Tags;
+    use \Cothema\OpeningHours\Model\T\Tags;
 
 }

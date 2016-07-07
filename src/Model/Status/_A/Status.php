@@ -1,6 +1,6 @@
 <?php
 
-namespace Cothema\OpeningHours\Status\A;
+namespace Cothema\OpeningHours\Model\Status\A;
 
 /**
  * 
@@ -8,7 +8,7 @@ namespace Cothema\OpeningHours\Status\A;
  */
 abstract class Status extends \Nette\Object {
 
-    use \Cothema\OpeningHours\T\Tags;
+    use \Cothema\OpeningHours\Model\T\Tags;
 
     private $resolver;
 

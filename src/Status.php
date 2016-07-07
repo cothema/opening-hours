@@ -3,7 +3,7 @@
 namespace Cothema\OpeningHours;
 
 use Cothema\OpeningHours\Exception\NotYetImplemented;
-use Cothema\OpeningHours\Status;
+use Cothema\OpeningHours\Model\Status as StatusModel;
 use Nette\Utils\DateTime;
 
 /**
@@ -37,20 +37,65 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @return string
+     * @return string|boolean
      */
-    private function closingAtByWeekDay($day) {
-        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
-        return $closing->format('H:i');
+    public function getClosingAtWarning() {
+        $time = new DateTime($this->time);
+
+        $status = $this->getStatus();
+        if ($status instanceof StatusModel\Opened && !$this->isOpenedByTime($time->modify($this->warningClosingDiff))) {
+            return $this->closingAtByWeekDay($status->getResolver()->getDayNumber());
+        }
+
+        return FALSE;
     }
 
     /**
      * 
-     * @return string
+     * @return string|boolean
      */
-    private function openingAtByWeekDay($day) {
-        $opening = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getOpenTime());
-        return $opening->format('H:i');
+    public function getOpeningAtWarning() {
+        $timeModified = new DateTime($this->time);
+        $timeModified->modify($this->warningOpeningDiff);
+
+        $status = $this->getStatus();
+        if ($status instanceof StatusModel\Closed && $this->isOpenedByTime($timeModified)) {
+            return $this->openingAtByWeekDay($timeModified->format('w'));
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * 
+     * @return \Cothema\OpeningHours\Model\Status\I\Status
+     */
+    public function getStatus() {
+        return $this->getStatusByTime($this->time);
+    }
+
+    /**
+     * 
+     * @param DateTime $time
+     * @return \Cothema\OpeningHours\Model\Status\I\Status
+     */
+    public function getStatusByTime(DateTime $time) {
+        $days = ['', '-1 day']; // DateTime modifiers
+
+        foreach ($days as $day) {
+            $iStatus = $this->getStatusByTimeInDay($time, $day);
+
+            if ($iStatus instanceof StatusModel\Opened || $iStatus instanceof StatusModel\OpenedWithTags) {
+                $status = $iStatus;
+                break;
+            }
+        }
+
+        if (!isset($status)) {
+            $status = new StatusModel\Closed();
+        }
+
+        return $status;
     }
 
     /**
@@ -79,6 +124,57 @@ class Status extends \Nette\Object {
 
     /**
      * 
+     * @return boolean
+     */
+    public function isOpened() {
+        return $this->isOpenedByTime($this->time);
+    }
+
+    /**
+     * 
+     * @param \Nette\Utils\DateTime $time
+     */
+    public function isOpenedByTime(DateTime $time) {
+        $status = $this->getStatusByTime($time);
+
+        if ($status instanceof StatusModel\Opened) {
+            return TRUE;
+        } elseif ($status instanceof StatusModel\Closed) {
+            return FALSE;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * 
+     * @param \Nette\Utils\DateTime $timeFrom
+     * @param \Nette\Utils\DateTime $timeTo
+     * @throws NotYetImplemented
+     * @return boolean
+     */
+    public function isOpenedByTimeRange(DateTime $timeFrom, DateTime $timeTo) {
+        throw new NotYetImplemented();
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isOpenedNonstop() {
+        $days = ['0', '1', '2', '3', '4', '5', '6'];
+        foreach ($days as $day) {
+            $openingHours = $this->openingHours->getWeekDay($day);
+
+            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '24:00')) {
+                return FALSE;
+            }
+        }
+        return TRUE;
+    }
+
+    /**
+     * 
      * @param \Nette\Utils\DateTime $time
      */
     public function setTime(DateTime $time) {
@@ -103,97 +199,33 @@ class Status extends \Nette\Object {
 
     /**
      * 
-     * @return boolean
+     * @return string
      */
-    public function isOpened() {
-        return $this->isOpenedByTime($this->time);
+    private function closingAtByWeekDay($day) {
+        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
+        return $closing->format('H:i');
     }
 
     /**
      * 
-     * @return boolean
+     * @return string
      */
-    public function isOpenedNonstop() {
-        $days = ['0', '1', '2', '3', '4', '5', '6'];
-        foreach ($days as $day) {
-            $openingHours = $this->openingHours->getWeekDay($day);
-
-            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '24:00')) {
-                return FALSE;
-            }
-        }
-        return TRUE;
-    }
-
-    /**
-     * 
-     * @param \Nette\Utils\DateTime $time
-     */
-    public function isOpenedByTime(DateTime $time) {
-        $status = $this->getStatusByTime($time);
-
-        if ($status instanceof Status\Opened) {
-            return TRUE;
-        } elseif ($status instanceof Status\Closed) {
-            return FALSE;
-        }
-
-        return NULL;
-    }
-
-    /**
-     * 
-     * @param \Nette\Utils\DateTime $timeFrom
-     * @param \Nette\Utils\DateTime $timeTo
-     * @throws NotYetImplemented
-     * @return boolean
-     */
-    public function isOpenedByTimeRange(DateTime $timeFrom, DateTime $timeTo) {
-        throw new NotYetImplemented();
-    }
-
-    /**
-     * 
-     * @return \Cothema\OpeningHours\Status\I\Status
-     */
-    public function getStatus() {
-        return $this->getStatusByTime($this->time);
-    }
-
-    /**
-     * 
-     * @param DateTime $time
-     * @return \Cothema\OpeningHours\Status\I\Status
-     */
-    public function getStatusByTime(DateTime $time) {
-        $days = ['', '-1 day']; // DateTime modifiers
-
-        foreach ($days as $day) {
-            $iStatus = $this->getStatusByTimeInDay($time, $day);
-
-            if ($iStatus instanceof Status\Opened || $iStatus instanceof Status\OpenedWithTags) {
-                $status = $iStatus;
-                break;
-            }
-        }
-
-        if (!isset($status)) {
-            $status = new Status\Closed();
-        }
-
-        return $status;
+    private function openingAtByWeekDay($day) {
+        $opening = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getOpenTime());
+        return $opening->format('H:i');
     }
 
     /**
      * 
      * @param \Nette\Utils\DateTime $time
      * @param string $modify
+     * @return StatusModel\I\Status
      */
     private function getStatusByTimeInDay(DateTime $time, $modify = '') {
         $day = (new DateTime($time))->modify($modify . ' ' . 'midnight');
         $openingHours = $this->openingHours->getDay($day);
         if ($openingHours === NULL) {
-            return new Status\Closed;
+            return new StatusModel\Closed;
         }
 
         $todayOpen = $this->getTimeMidnight()->modify($modify . ' ' . $openingHours->getOpenTime());
@@ -202,13 +234,13 @@ class Status extends \Nette\Object {
         if (($time >= $todayOpen && $time < $todayClose)) {
             $tags = $openingHours->tags;
             if (count($tags)) {
-                $status = new Status\OpenedWithTags;
+                $status = new StatusModel\OpenedWithTags;
                 $status->setTags($tags);
             } else {
-                $status = new Status\Opened;
+                $status = new StatusModel\Opened;
             }
         } else {
-            $status = new Status\Closed;
+            $status = new StatusModel\Closed;
         }
 
         $resolver = new Resolver\WeekDay();
@@ -224,37 +256,6 @@ class Status extends \Nette\Object {
      */
     private function getTimeMidnight() {
         return (new DateTime($this->time))->setTime('00', '00', '00');
-    }
-
-    /**
-     * 
-     * @return string|boolean
-     */
-    public function getClosingAtWarning() {
-        $time = new DateTime($this->time);
-
-        $status = $this->getStatus();
-        if ($status instanceof Status\Opened && !$this->isOpenedByTime($time->modify($this->warningClosingDiff))) {
-            return $this->closingAtByWeekDay($status->getResolver()->getDayNumber());
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * 
-     * @return string|boolean
-     */
-    public function getOpeningAtWarning() {
-        $timeModified = new DateTime($this->time);
-        $timeModified->modify($this->warningOpeningDiff);
-
-        $status = $this->getStatus();
-        if ($status instanceof Status\Closed && $this->isOpenedByTime($timeModified)) {
-            return $this->openingAtByWeekDay($timeModified->format('w'));
-        }
-
-        return FALSE;
     }
 
 }

@@ -7,7 +7,8 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- *
+ * Generator for specific days only table (e.g. 1st January 2016: closed) 
+ * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
 class SpecificDays extends A\Table {
@@ -18,9 +19,10 @@ class SpecificDays extends A\Table {
     /** @var integer */
     private $nextDays = 30;
 
+    /**
+     * Generate table
+     */
     protected function generate() {
-        $openingHours = $this->openingHours;
-
         $days = $this->getSpecificDays();
 
         $table = new Table\Sheet;

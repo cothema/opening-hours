@@ -1,8 +1,8 @@
 <?php
 
-namespace Cothema\OpeningHours\T;
+namespace Cothema\OpeningHours\Model\T;
 
-use Cothema\OpeningHours\Exception\Tag\TagNotExists;
+use Cothema\OpeningHours\Exception\Model\Tag\TagNotExists;
 
 /**
  * 
@@ -15,9 +15,9 @@ trait Tags {
 
     /**
      * 
-     * @param \Cothema\OpeningHours\T\Cothema\OpeningHours\Tag\A\Tag $tag
+     * @param \Cothema\OpeningHours\T\Cothema\OpeningHours\Model\Tag\A\Tag $tag
      */
-    public function addTag(Cothema\OpeningHours\Tag\A\Tag $tag) {
+    public function addTag(Cothema\OpeningHours\Model\Tag\A\Tag $tag) {
         $this->tags[] = $tag;
     }
 

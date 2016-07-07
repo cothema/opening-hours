@@ -1,6 +1,6 @@
 <?php
 
-namespace Cothema\OpeningHours\Status;
+namespace Cothema\OpeningHours\Model\Status;
 
 /**
  * 

@@ -2,9 +2,10 @@
 
 namespace Cothema\OpeningHours\Generator\Table\A;
 
+use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
+use Cothema\OpeningHours\Exception\MissingImplementation;
 use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Model\WeekTable;
-use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 
 /**
  * 
@@ -12,11 +13,11 @@ use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
  */
 abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Table\I\Table {
 
-    /** @var OpeningHours */
-    protected $openingHours;
-
     /** @var WeekTable\Table */
     protected $generatedTable;
+
+    /** @var OpeningHours */
+    protected $openingHours;
 
     /** @var array */
     protected $timeFilters = [];
@@ -45,13 +46,22 @@ abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Gene
         $this->timeFilters[] = $filterClass;
     }
 
-    protected function generate() {
-        
-    }
-
+    /**
+     * 
+     * @return WeekTable\Table
+     */
     public function getTable() {
         $this->generate();
         return $this->generatedTable;
+    }
+
+    /**
+     * Generate concrete table (concrete implementation required).
+     * 
+     * @throws MissingImplementation
+     */
+    protected function generate() {
+        throw new MissingImplementation();
     }
 
 }

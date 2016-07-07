@@ -7,7 +7,8 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- *
+ * Generator for relative days table (e.g. today: closed, tommorow: 9 AM - 2 PM) 
+ * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
 class RelativeDays extends A\Table {
@@ -18,6 +19,9 @@ class RelativeDays extends A\Table {
     /** @var integer */
     private $nextDays = 2;
 
+    /**
+     * Generate table
+     */
     protected function generate() {
         $openingHours = $this->openingHours;
 
