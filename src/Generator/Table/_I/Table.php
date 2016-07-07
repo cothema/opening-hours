@@ -3,6 +3,7 @@
 namespace Cothema\OpeningHours\Generator\Table\I;
 
 use Cothema\OpeningHours\Model\OpeningHours;
+use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 
 /**
  * 
@@ -19,7 +20,7 @@ interface Table {
     /**
      * 
      * @param string $filter e.g. Time\Simple
-     * @throws \Exception
+     * @throws FilterClassNotExists
      */
     public function addTimeFilter($filter);
 

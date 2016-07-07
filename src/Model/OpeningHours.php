@@ -3,6 +3,7 @@
 namespace Cothema\OpeningHours\Model;
 
 use Nette\Utils\DateTime;
+use Cothema\OpeningHours\Exception\Model\InvalidOpeningHoursParamFormat;
 
 /**
  * 
@@ -43,7 +44,7 @@ class OpeningHours extends \Nette\Object {
             $specificDay->setOpenTime('00:00');
             $specificDay->setCloseTime('24:00');
         } else {
-            throw new \Exception('Invalid $openingHours param format.');
+            throw new InvalidOpeningHoursParamFormat('Invalid $openingHours param format.');
         }
 
         $this->specificDays[$day] = $specificDay;

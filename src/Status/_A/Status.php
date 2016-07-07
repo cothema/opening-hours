@@ -6,7 +6,7 @@ namespace Cothema\OpeningHours\Status\A;
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class Status extends \Nette\Object {
+abstract class Status extends \Nette\Object {
 
     use \Cothema\OpeningHours\T\Tags;
 

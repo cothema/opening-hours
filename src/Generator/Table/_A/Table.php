@@ -4,12 +4,13 @@ namespace Cothema\OpeningHours\Generator\Table\A;
 
 use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Model\WeekTable;
+use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 
 /**
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Table\I\Table {
+abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Table\I\Table {
 
     /** @var OpeningHours */
     protected $openingHours;
@@ -32,13 +33,13 @@ class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Tab
     /**
      * 
      * @param string $filter e.g. Time\Simple
-     * @throws \Exception
+     * @throws FilterClassNotExists
      */
     public function addTimeFilter($filter) {
         $filterClass = '\\Cothema\\Time\\Filter\\' . $filter;
 
         if (!class_exists($filterClass)) {
-            throw new \Exception('Filter class "' . $filterClass . '" does not exists.');
+            throw new FilterClassNotExists('Filter class "' . $filterClass . '" does not exists.');
         }
 
         $this->timeFilters[] = $filterClass;

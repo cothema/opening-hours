@@ -2,6 +2,8 @@
 
 namespace Cothema\OpeningHours\T;
 
+use Cothema\OpeningHours\Exception\Tag\TagNotExists;
+
 /**
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
@@ -18,17 +20,18 @@ trait Tags {
     public function addTag(Cothema\OpeningHours\Tag\A\Tag $tag) {
         $this->tags[] = $tag;
     }
-    
+
     /**
      * 
      * @param string $tag
+     * @throws TagNotExists
      */
     public function addTagString($tag) {
         $class = 'Cothema\\OpeningHours\\Tag\\' . $tag;
         if (class_exists($class)) {
             $this->tags[] = new $class;
         } else {
-            throw new \Exception(sprintf('Tag "%s" does not exists!', $tag));
+            throw new TagNotExists(sprintf('Tag "%s" does not exists!', $tag));
         }
     }
 

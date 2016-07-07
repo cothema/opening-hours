@@ -2,6 +2,8 @@
 
 namespace Cothema\OpeningHours\Resolver;
 
+use Cothema\OpeningHours\Exception\Resolver\InvalidInput;
+
 /**
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
@@ -18,13 +20,13 @@ class WeekDay extends \Nette\Object {
     /**
      * 
      * @param int|string $dayNumber
-     * @throws \Exception
+     * @throws InvalidInput
      */
     public function setDayNumber($dayNumber) {
         if (is_numeric($dayNumber) && ($dayNumber >= 0 || $dayNumber <= 6)) {
             $this->dayNumber = (int) $dayNumber;
         } else {
-            throw new \Exception('Invalid input!');
+            throw new InvalidInput(sprintf('Input value "%s" is invalid!', $dayNumber));
         }
     }
 

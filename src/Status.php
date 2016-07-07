@@ -2,7 +2,9 @@
 
 namespace Cothema\OpeningHours;
 
-use \Nette\Utils\DateTime;
+use Cothema\OpeningHours\Exception\NotYetImplemented;
+use Cothema\OpeningHours\Status;
+use Nette\Utils\DateTime;
 
 /**
  * 
@@ -143,10 +145,11 @@ class Status extends \Nette\Object {
      * 
      * @param \Nette\Utils\DateTime $timeFrom
      * @param \Nette\Utils\DateTime $timeTo
+     * @throws NotYetImplemented
      * @return boolean
      */
     public function isOpenedByTimeRange(DateTime $timeFrom, DateTime $timeTo) {
-        throw new \Exception('Not yet implemented!');
+        throw new NotYetImplemented();
     }
 
     /**
@@ -231,7 +234,7 @@ class Status extends \Nette\Object {
         $time = new DateTime($this->time);
 
         $status = $this->getStatus();
-        if ($status instanceof \Cothema\OpeningHours\Status\Opened && !$this->isOpenedByTime($time->modify($this->warningClosingDiff))) {
+        if ($status instanceof Status\Opened && !$this->isOpenedByTime($time->modify($this->warningClosingDiff))) {
             return $this->closingAtByWeekDay($status->getResolver()->getDayNumber());
         }
 
@@ -247,7 +250,7 @@ class Status extends \Nette\Object {
         $timeModified->modify($this->warningOpeningDiff);
 
         $status = $this->getStatus();
-        if ($status instanceof \Cothema\OpeningHours\Status\Closed && $this->isOpenedByTime($timeModified)) {
+        if ($status instanceof Status\Closed && $this->isOpenedByTime($timeModified)) {
             return $this->openingAtByWeekDay($timeModified->format('w'));
         }
 
