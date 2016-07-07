@@ -5,6 +5,7 @@ namespace Cothema\OpeningHours\Resolver;
 use Cothema\OpeningHours\Exception\Resolver\InvalidInput;
 
 /**
+ * Resolver for week days
  * 
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
