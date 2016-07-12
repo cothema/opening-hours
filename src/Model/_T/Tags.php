@@ -27,7 +27,7 @@ trait Tags {
      * @throws TagNotExists
      */
     public function addTagString($tag) {
-        $class = 'Cothema\\OpeningHours\\Tag\\' . $tag;
+        $class = 'Cothema\\OpeningHours\\Model\\Tag\\' . $tag;
         if (class_exists($class)) {
             $this->tags[] = new $class;
         } else {
