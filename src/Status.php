@@ -161,16 +161,16 @@ class Status extends \Nette\Object {
      * 
      * @return boolean
      */
-    public function isOpenedNonstop() {
-        $days = ['0', '1', '2', '3', '4', '5', '6'];
-        foreach ($days as $day) {
-            $openingHours = $this->openingHours->getWeekDay($day);
+    public function isClosedNonstop() {
+        return $this->openingHours->isClosedNonstop();
+    }
 
-            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '24:00')) {
-                return FALSE;
-            }
-        }
-        return TRUE;
+    /**
+     * 
+     * @return boolean
+     */
+    public function isOpenedNonstop() {
+        return $this->openingHours->isOpenedNonstop();
     }
 
     /**

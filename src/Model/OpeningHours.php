@@ -145,4 +145,36 @@ class OpeningHours extends \Nette\Object {
         }
     }
 
+    /**
+     * 
+     * @return boolean
+     */
+    public function isClosedNonstop() {
+        $days = ['0', '1', '2', '3', '4', '5', '6'];
+        foreach ($days as $day) {
+            $openingHours = $this->getWeekDay($day);
+
+            if (!($openingHours->getOpenTime() === FALSE && $openingHours->getCloseTime() === FALSE)) {
+                return FALSE;
+            }
+        }
+        return TRUE;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isOpenedNonstop() {
+        $days = ['0', '1', '2', '3', '4', '5', '6'];
+        foreach ($days as $day) {
+            $openingHours = $this->getWeekDay($day);
+
+            if (!($openingHours->getOpenTime() === '00:00' && $openingHours->getCloseTime() === '24:00')) {
+                return FALSE;
+            }
+        }
+        return TRUE;
+    }
+
 }
