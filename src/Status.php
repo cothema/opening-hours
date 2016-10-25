@@ -202,7 +202,11 @@ class Status extends \Nette\Object {
      * @return string
      */
     private function closingAtByWeekDay($day) {
-        $closing = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getCloseTime());
+        $time = $this->openingHours->getWeekDay($day)->getCloseTime();
+        if(!$time) {
+            return FALSE;
+        }
+        $closing = $this->getTimeMidnight()->modify($time);
         return $closing->format('H:i');
     }
 
@@ -211,7 +215,11 @@ class Status extends \Nette\Object {
      * @return string
      */
     private function openingAtByWeekDay($day) {
-        $opening = $this->getTimeMidnight()->modify($this->openingHours->getWeekDay($day)->getOpenTime());
+        $time = $this->openingHours->getWeekDay($day)->getOpenTime();
+        if(!$time) {
+            return FALSE;
+        }
+        $opening = $this->getTimeMidnight()->modify($time);
         return $opening->format('H:i');
     }
 
