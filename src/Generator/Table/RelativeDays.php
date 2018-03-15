@@ -7,13 +7,14 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- * Generator for relative days table (e.g. today: closed, tommorow: 9 AM - 2 PM) 
+ * Generator for relative days table (e.g. today: closed, tommorow: 9 AM - 2 PM)
  *
  * @property int $nextDays
  * @property int $previousDays
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class RelativeDays extends A\Table {
+class RelativeDays extends A\Table
+{
 
     /** @var integer */
     private $previousDays = 0;
@@ -22,9 +23,42 @@ class RelativeDays extends A\Table {
     private $nextDays = 2;
 
     /**
+     * @return int
+     */
+    public function getNextDays(): int
+    {
+        return $this->nextDays;
+    }
+
+    /**
+     * @param int $nextDays
+     */
+    public function setNextDays(int $nextDays)
+    {
+        $this->nextDays = $nextDays;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreviousDays(): int
+    {
+        return $this->previousDays;
+    }
+
+    /**
+     * @param int $previousDays
+     */
+    public function setPreviousDays(int $previousDays)
+    {
+        $this->previousDays = $previousDays;
+    }
+
+    /**
      * Generate table
      */
-    protected function generate() {
+    protected function generate(): void
+    {
         $openingHours = $this->openingHours;
 
         $days = $this->getRelativeDays();
@@ -64,7 +98,8 @@ class RelativeDays extends A\Table {
     /**
      * @return array
      */
-    private function getRelativeDays(): array {
+    private function getRelativeDays(): array
+    {
         $days = [];
         for ($i = $this->previousDays; $i < 0; $i++) {
             $days[] = $i;
@@ -76,34 +111,6 @@ class RelativeDays extends A\Table {
             $days[] = $i;
         }
         return $days;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNextDays(): int {
-        return $this->nextDays;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPreviousDays(): int {
-        return $this->previousDays;
-    }
-
-    /**
-     * @param int $nextDays
-     */
-    public function setNextDays(int $nextDays) {
-        $this->nextDays = $nextDays;
-    }
-
-    /**
-     * @param int $previousDays
-     */
-    public function setPreviousDays(int $previousDays) {
-        $this->previousDays = $previousDays;
     }
 
 }

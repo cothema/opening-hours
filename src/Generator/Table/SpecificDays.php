@@ -57,7 +57,7 @@ class SpecificDays extends A\Table
     /**
      * Generate table
      */
-    protected function generate()
+    protected function generate(): void
     {
         $days = $this->getSpecificDays();
 

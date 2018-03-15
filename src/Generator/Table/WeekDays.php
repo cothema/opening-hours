@@ -40,7 +40,7 @@ class WeekDays extends A\Table
     /**
      * Generate table
      */
-    protected function generate()
+    protected function generate(): void
     {
         $openingHours = $this->openingHours;
 

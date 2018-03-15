@@ -4,7 +4,7 @@ namespace Cothema\OpeningHours\Generator\Table\I;
 
 use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 use Cothema\OpeningHours\Model\OpeningHours;
-use Cothema\OpeningHours\Model\WeekTable;
+use Cothema\OpeningHours\Model\Table\Sheet;
 
 /**
  *
@@ -28,8 +28,8 @@ interface Table
 
     /**
      *
-     * @return array
+     * @return Sheet
      */
-    public function getTable(): WeekTable\Table;
+    public function getTable(): Sheet;
 
 }

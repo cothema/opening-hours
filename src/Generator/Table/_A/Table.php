@@ -5,6 +5,7 @@ namespace Cothema\OpeningHours\Generator\Table\A;
 use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 use Cothema\OpeningHours\Exception\MissingImplementation;
 use Cothema\OpeningHours\Model\OpeningHours;
+use Cothema\OpeningHours\Model\Table\Sheet;
 use Cothema\OpeningHours\Model\WeekTable;
 use Nette\SmartObject;
 
@@ -17,7 +18,7 @@ abstract class Table implements \Cothema\OpeningHours\Generator\Table\I\Table
 
     use SmartObject;
 
-    /** @var WeekTable\Table */
+    /** @var Sheet */
     protected $generatedTable;
 
     /** @var OpeningHours */
@@ -54,9 +55,9 @@ abstract class Table implements \Cothema\OpeningHours\Generator\Table\I\Table
 
     /**
      *
-     * @return WeekTable\Table
+     * @return Sheet
      */
-    public function getTable(): WeekTable\Table
+    public function getTable(): Sheet
     {
         $this->generate();
         return $this->generatedTable;
