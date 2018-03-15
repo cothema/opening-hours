@@ -3,10 +3,11 @@
 namespace Cothema\OpeningHours\Model\I;
 
 /**
- * 
+ *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-interface Day {
+interface Day
+{
 
     public function getCloseTime();
 

@@ -1,8 +1,8 @@
 <?php
 
-use \Nette\Caching\Storages\FileStorage;
-use \Nette\Loaders\RobotLoader;
-use \Tester\Environment;
+use Nette\Caching\Storages\FileStorage;
+use Nette\Loaders\RobotLoader;
+use Tester\Environment;
 
 define('DIR_ROOT', __DIR__ . '/..');
 define('DIR_TEMP', DIR_ROOT . '/temp');

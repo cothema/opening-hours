@@ -6,12 +6,16 @@ use Cothema\OpeningHours\Exception\Generator\FilterClassNotExists;
 use Cothema\OpeningHours\Exception\MissingImplementation;
 use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Model\WeekTable;
+use Nette\SmartObject;
 
 /**
- * 
+ * @property-read object $table
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Generator\Table\I\Table {
+abstract class Table implements \Cothema\OpeningHours\Generator\Table\I\Table
+{
+
+    use SmartObject;
 
     /** @var WeekTable\Table */
     protected $generatedTable;
@@ -23,20 +27,22 @@ abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Gene
     protected $timeFilters = [];
 
     /**
-     * 
+     *
      * @param OpeningHours $openingHours
      */
-    public function __construct(OpeningHours $openingHours) {
+    public function __construct(OpeningHours $openingHours)
+    {
         $this->openingHours = $openingHours;
         $this->addTimeFilter('Time\\Def');
     }
 
     /**
-     * 
+     *
      * @param string $filter e.g. Time\Simple
      * @throws FilterClassNotExists
      */
-    public function addTimeFilter($filter) {
+    public function addTimeFilter(string $filter): void
+    {
         $filterClass = '\\Cothema\\Time\\Filter\\' . $filter;
 
         if (!class_exists($filterClass)) {
@@ -47,20 +53,22 @@ abstract class Table extends \Nette\Object implements \Cothema\OpeningHours\Gene
     }
 
     /**
-     * 
+     *
      * @return WeekTable\Table
      */
-    public function getTable() {
+    public function getTable(): WeekTable\Table
+    {
         $this->generate();
         return $this->generatedTable;
     }
 
     /**
      * Generate concrete table (concrete implementation required).
-     * 
+     *
      * @throws MissingImplementation
      */
-    protected function generate() {
+    protected function generate()
+    {
         throw new MissingImplementation();
     }
 

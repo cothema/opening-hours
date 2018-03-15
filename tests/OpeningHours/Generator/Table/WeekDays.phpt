@@ -2,15 +2,17 @@
 
 namespace Cothema\OpeningHours\Test;
 
-use Cothema\OpeningHours\Model\OpeningHours;
 use Cothema\OpeningHours\Generator\Table\WeekDays as Tested;
+use Cothema\OpeningHours\Model\OpeningHours;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class WeekDays extends \Tester\TestCase {
+class WeekDays extends \Tester\TestCase
+{
 
-    public function testCase1() {
+    public function testCase1()
+    {
         $table = new Tested($this->getOpeningHours1());
         $tableArray = $table->getTable()->getLines();
 
@@ -23,7 +25,8 @@ class WeekDays extends \Tester\TestCase {
         Assert::same('23:00', $tableArray[1]->getTimeTo());
     }
 
-    private function getOpeningHours1() {
+    private function getOpeningHours1()
+    {
         $openingHours = new OpeningHours;
         $openingHours->setOpeningHours([
             '0' => ['8:00', '20:00'], // Sunday

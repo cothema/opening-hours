@@ -3,10 +3,11 @@
 namespace Cothema\OpeningHours\Model\Status\I;
 
 /**
- * 
+ *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-interface Status {
+interface Status
+{
 
     public function getResolver();
 

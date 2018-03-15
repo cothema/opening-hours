@@ -8,7 +8,9 @@ use Nette\Utils\DateTime;
 
 /**
  * Generator for relative days table (e.g. today: closed, tommorow: 9 AM - 2 PM) 
- * 
+ *
+ * @property int $nextDays
+ * @property int $previousDays
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
 class RelativeDays extends A\Table {
@@ -51,7 +53,7 @@ class RelativeDays extends A\Table {
             $line->setTimeToFormatted($timeToFormatted);
             $line->tags = $dayOpeningHours->tags;
             if ($dayOpeningHours instanceof \Cothema\OpeningHours\Model\SpecificDay) {
-                $line->specific = TRUE;
+                $line->specific = true;
             }
             $table->addLine($line);
         }
@@ -59,7 +61,10 @@ class RelativeDays extends A\Table {
         $this->generatedTable = $table;
     }
 
-    private function getRelativeDays() {
+    /**
+     * @return array
+     */
+    private function getRelativeDays(): array {
         $days = [];
         for ($i = $this->previousDays; $i < 0; $i++) {
             $days[] = $i;
@@ -73,19 +78,31 @@ class RelativeDays extends A\Table {
         return $days;
     }
 
-    public function getNextDays() {
+    /**
+     * @return int
+     */
+    public function getNextDays(): int {
         return $this->nextDays;
     }
 
-    public function getPreviousDays() {
+    /**
+     * @return int
+     */
+    public function getPreviousDays(): int {
         return $this->previousDays;
     }
 
-    public function setNextDays($nextDays) {
+    /**
+     * @param int $nextDays
+     */
+    public function setNextDays(int $nextDays) {
         $this->nextDays = $nextDays;
     }
 
-    public function setPreviousDays($previousDays) {
+    /**
+     * @param int $previousDays
+     */
+    public function setPreviousDays(int $previousDays) {
         $this->previousDays = $previousDays;
     }
 

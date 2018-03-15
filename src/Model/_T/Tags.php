@@ -5,28 +5,32 @@ namespace Cothema\OpeningHours\Model\T;
 use Cothema\OpeningHours\Exception\Model\Tag\TagNotExists;
 
 /**
- * 
+ *
+ * @property int $tags
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-trait Tags {
+trait Tags
+{
 
     /** @var array */
     private $tags = [];
 
     /**
-     * 
+     *
      * @param \Cothema\OpeningHours\T\Cothema\OpeningHours\Model\Tag\A\Tag $tag
      */
-    public function addTag(Cothema\OpeningHours\Model\Tag\A\Tag $tag) {
+    public function addTag(Cothema\OpeningHours\Model\Tag\A\Tag $tag)
+    {
         $this->tags[] = $tag;
     }
 
     /**
-     * 
+     *
      * @param string $tag
      * @throws TagNotExists
      */
-    public function addTagString($tag) {
+    public function addTagString($tag)
+    {
         $class = 'Cothema\\OpeningHours\\Model\\Tag\\' . $tag;
         if (class_exists($class)) {
             $this->tags[] = new $class;
@@ -36,18 +40,20 @@ trait Tags {
     }
 
     /**
-     * 
+     *
      * @return array
      */
-    public function getTags() {
+    public function getTags(): array
+    {
         return $this->tags;
     }
 
     /**
-     * 
+     *
      * @param array $tags
      */
-    public function setTags(array $tags) {
+    public function setTags(array $tags)
+    {
         $this->tags = $tags;
     }
 

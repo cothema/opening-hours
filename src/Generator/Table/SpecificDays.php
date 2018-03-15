@@ -7,11 +7,14 @@ use Cothema\Time\Filter\Time as FilterTime;
 use Nette\Utils\DateTime;
 
 /**
- * Generator for specific days only table (e.g. 1st January 2016: closed) 
- * 
+ * Generator for specific days only table (e.g. 1st January 2016: closed)
+ *
+ * @property int $nextDays
+ * @property int $previousDays
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class SpecificDays extends A\Table {
+class SpecificDays extends A\Table
+{
 
     /** @var integer */
     private $previousDays = 0;
@@ -20,28 +23,61 @@ class SpecificDays extends A\Table {
     private $nextDays = 30;
 
     /**
+     * @return int
+     */
+    public function getNextDays(): int
+    {
+        return $this->nextDays;
+    }
+
+    /**
+     * @param int $nextDays
+     */
+    public function setNextDays(int $nextDays): void
+    {
+        $this->nextDays = $nextDays;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPreviousDays(): int
+    {
+        return $this->previousDays;
+    }
+
+    /**
+     * @param int $previousDays
+     */
+    public function setPreviousDays(int $previousDays): void
+    {
+        $this->previousDays = $previousDays;
+    }
+
+    /**
      * Generate table
      */
-    protected function generate() {
+    protected function generate()
+    {
         $days = $this->getSpecificDays();
 
         $table = new Table\Sheet;
 
         $line = new Table\Line;
-        $lastTimeFrom = NULL;
-        $lastTimeTo = NULL;
-        $lastDay = NULL;
-        $lastTags = NULL;
+        $lastTimeFrom = null;
+        $lastTimeTo = null;
+        $lastDay = null;
+        $lastTags = null;
         $now = new DateTime();
 
         foreach ($days as $day) {
             $timeFrom = (new FilterTime\Def($day->openTime))->output;
             $timeTo = (new FilterTime\Def($day->closeTime))->output;
 
-            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo && $this->tagsAreSame($lastTags, $day->tags) && $lastDay !== NULL && (int) $lastDay->day->diff($day->day)->format('%r%a') === 1) {
+            if ($lastTimeFrom === $timeFrom && $lastTimeTo === $timeTo && $this->tagsAreSame($lastTags, $day->tags) && $lastDay !== null && (int)$lastDay->day->diff($day->day)->format('%r%a') === 1) {
                 $line->dateTo = $day->day;
             } else {
-                ($lastTimeTo !== NULL) && $table->addLine($line);
+                ($lastTimeTo !== null) && $table->addLine($line);
                 $line = new Table\Line;
                 $line->dateFrom = $day->day;
                 $line->dateTo = $day->day;
@@ -59,36 +95,43 @@ class SpecificDays extends A\Table {
             $lastDay = $day;
         }
 
-        ($lastTimeTo !== NULL) && $table->addLine($line);
+        ($lastTimeTo !== null) && $table->addLine($line);
 
         $this->generatedTable = $table;
     }
 
+    private function getSpecificDays()
+    {
+        return $this->openingHours->getSpecificDays($this->nextDays, $this->previousDays);
+    }
+
     /**
-     * 
+     *
      * @param array $tagsA
      * @param array $tagsB
      * @return boolean;
      */
-    private function tagsAreSame(array $tagsA, array $tagsB) {
+    private function tagsAreSame(array $tagsA, array $tagsB)
+    {
         if ($tagsA === $tagsB) {
-            return TRUE;
+            return true;
         }
 
         if (count($tagsA) !== count($tagsB)) {
-            return FALSE;
+            return false;
         }
 
         for ($i = 0; $i < count($tagsA); $i++) {
-            if (!(string) $tagsA[$i] === (string) $tagsB[$i]) {
-                return FALSE;
+            if (!(string)$tagsA[$i] === (string)$tagsB[$i]) {
+                return false;
             }
         }
 
-        return TRUE;
+        return true;
     }
 
-    private function lineAddTime($line, $timeFrom, $timeTo) {
+    private function lineAddTime($line, $timeFrom, $timeTo)
+    {
         foreach ($this->timeFilters as $filter) {
             $timeFromFormatted = (new $filter($timeFrom))->getOutput();
             $timeToFormatted = (new $filter($timeTo))->getOutput();
@@ -99,26 +142,6 @@ class SpecificDays extends A\Table {
         $line->setTimeTo($timeTo);
         $line->setTimeToFormatted($timeToFormatted);
         return $line;
-    }
-
-    private function getSpecificDays() {
-        return $this->openingHours->getSpecificDays($this->nextDays, $this->previousDays);
-    }
-
-    public function getNextDays() {
-        return $this->nextDays;
-    }
-
-    public function getPreviousDays() {
-        return $this->previousDays;
-    }
-
-    public function setNextDays($nextDays) {
-        $this->nextDays = $nextDays;
-    }
-
-    public function setPreviousDays($previousDays) {
-        $this->previousDays = $previousDays;
     }
 
 }

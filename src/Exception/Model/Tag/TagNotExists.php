@@ -3,9 +3,10 @@
 namespace Cothema\OpeningHours\Exception\Tag;
 
 /**
- * 
+ *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-class TagNotExists extends \Exception {
-    
+class TagNotExists extends \Exception
+{
+
 }
