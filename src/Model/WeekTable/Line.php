@@ -7,6 +7,8 @@ use Cothema\Time\Validator;
 /**
  *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
+ * @property int $dayFrom
+ * @property int $dayTo
  */
 class Line extends \Cothema\OpeningHours\Model\Table\Line
 {
@@ -21,7 +23,7 @@ class Line extends \Cothema\OpeningHours\Model\Table\Line
      *
      * @return boolean
      */
-    public function isAllWeek()
+    public function isAllWeek(): bool
     {
         return ($this->getDayFrom() === 1 && $this->getDayTo() === 0) || ($this->getDayFrom() === 0 && $this->getDayTo() === 6);
     }
@@ -30,7 +32,7 @@ class Line extends \Cothema\OpeningHours\Model\Table\Line
      *
      * @return int
      */
-    public function getDayFrom()
+    public function getDayFrom(): int
     {
         return $this->dayFrom;
     }
@@ -39,7 +41,7 @@ class Line extends \Cothema\OpeningHours\Model\Table\Line
      *
      * @param int $dayNum
      */
-    public function setDayFrom($dayNum)
+    public function setDayFrom(int $dayNum): void
     {
         Validator\WeekDayNumber::validate($dayNum);
         $this->dayFrom = $dayNum;
@@ -49,7 +51,7 @@ class Line extends \Cothema\OpeningHours\Model\Table\Line
      *
      * @return int
      */
-    public function getDayTo()
+    public function getDayTo(): int
     {
         return $this->dayTo;
     }
@@ -58,7 +60,7 @@ class Line extends \Cothema\OpeningHours\Model\Table\Line
      *
      * @param int $dayNum
      */
-    public function setDayTo($dayNum)
+    public function setDayTo(int $dayNum): void
     {
         Validator\WeekDayNumber::validate($dayNum);
         $this->dayTo = $dayNum;

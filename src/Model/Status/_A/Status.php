@@ -8,7 +8,7 @@ use Nette\SmartObject;
  *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
  */
-abstract class Status
+abstract class Status implements \Cothema\OpeningHours\Model\Status\I\Status
 {
 
     use SmartObject;

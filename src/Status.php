@@ -10,6 +10,12 @@ use Nette\Utils\DateTime;
 /**
  *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
+ * @property-read bool|string $closingAtWarning
+ * @property-read bool|string $openingAtWarning
+ * @property-read StatusModel\I\Status $status
+ * @property DateTime $time
+ * @property string $warningClosingDiff
+ * @property string $warningOpeningDiff
  */
 class Status
 {
@@ -60,7 +66,7 @@ class Status
      *
      * @return \Cothema\OpeningHours\Model\Status\I\Status
      */
-    public function getStatus()
+    public function getStatus():  \Cothema\OpeningHours\Model\Status\I\Status
     {
         return $this->getStatusByTime($this->time);
     }
@@ -187,7 +193,7 @@ class Status
      *
      * @return string
      */
-    private function openingAtByWeekDay($day)
+    private function openingAtByWeekDay($day): string
     {
         $time = $this->openingHours->getWeekDay($day)->getOpenTime();
         if (!$time) {
@@ -199,16 +205,16 @@ class Status
 
     /**
      *
-     * @return \Nette\Utils\DateTime
+     * @return DateTime
      */
-    public function getTime()
+    public function getTime(): DateTime
     {
         return $this->time;
     }
 
     /**
      *
-     * @param \Nette\Utils\DateTime $time
+     * @param DateTime $time
      */
     public function setTime(DateTime $time)
     {
@@ -219,7 +225,7 @@ class Status
      *
      * @return string
      */
-    public function getWarningClosingDiff()
+    public function getWarningClosingDiff(): string
     {
         return $this->warningClosingDiff;
     }
@@ -228,7 +234,7 @@ class Status
      *
      * @param string $diff
      */
-    public function setWarningClosingDiff($diff)
+    public function setWarningClosingDiff(string $diff)
     {
         $this->warningClosingDiff = $diff;
     }
@@ -237,7 +243,7 @@ class Status
      *
      * @return string
      */
-    public function getWarningOpeningDiff()
+    public function getWarningOpeningDiff(): string
     {
         return $this->warningOpeningDiff;
     }
@@ -246,7 +252,7 @@ class Status
      *
      * @param string $diff
      */
-    public function setWarningOpeningDiff($diff)
+    public function setWarningOpeningDiff(string $diff)
     {
         $this->warningOpeningDiff = $diff;
     }
@@ -255,7 +261,7 @@ class Status
      *
      * @return boolean
      */
-    public function isOpened()
+    public function isOpened(): bool
     {
         return $this->isOpenedByTime($this->time);
     }
@@ -276,7 +282,7 @@ class Status
      *
      * @return boolean
      */
-    public function isClosedNonstop()
+    public function isClosedNonstop(): bool
     {
         return $this->openingHours->isClosedNonstop();
     }
@@ -285,7 +291,7 @@ class Status
      *
      * @return boolean
      */
-    public function isOpenedNonstop()
+    public function isOpenedNonstop(): bool
     {
         return $this->openingHours->isOpenedNonstop();
     }

@@ -68,7 +68,7 @@ abstract class Table implements \Cothema\OpeningHours\Generator\Table\I\Table
      *
      * @throws MissingImplementation
      */
-    protected function generate()
+    protected function generate(): void
     {
         throw new MissingImplementation();
     }

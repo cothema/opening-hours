@@ -152,7 +152,7 @@ class OpeningHours
      *
      * @return boolean
      */
-    public function isClosedNonstop()
+    public function isClosedNonstop(): bool
     {
         $days = ['0', '1', '2', '3', '4', '5', '6'];
         foreach ($days as $day) {
@@ -170,7 +170,7 @@ class OpeningHours
      * @param string $weekDay
      * @return WeekDay
      */
-    public function getWeekDay($weekDay)
+    public function getWeekDay($weekDay): WeekDay
     {
         return $this->openingHours[(string)$weekDay];
     }
@@ -179,7 +179,7 @@ class OpeningHours
      *
      * @return boolean
      */
-    public function isOpenedNonstop()
+    public function isOpenedNonstop(): bool
     {
         $days = ['0', '1', '2', '3', '4', '5', '6'];
         foreach ($days as $day) {

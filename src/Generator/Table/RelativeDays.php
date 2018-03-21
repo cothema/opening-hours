@@ -33,7 +33,7 @@ class RelativeDays extends A\Table
     /**
      * @param int $nextDays
      */
-    public function setNextDays(int $nextDays)
+    public function setNextDays(int $nextDays): void
     {
         $this->nextDays = $nextDays;
     }
@@ -49,7 +49,7 @@ class RelativeDays extends A\Table
     /**
      * @param int $previousDays
      */
-    public function setPreviousDays(int $previousDays)
+    public function setPreviousDays(int $previousDays): void
     {
         $this->previousDays = $previousDays;
     }

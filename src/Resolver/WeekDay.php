@@ -9,6 +9,7 @@ use Nette\SmartObject;
  * Resolver for week days
  *
  * @author Milos Havlicek <miloshavlicek@gmail.com>
+ * @property int|null $dayNumber
  */
 class WeekDay
 {
